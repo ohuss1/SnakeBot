@@ -14,7 +14,7 @@
         var CanWidth=500;
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
-          color:brown,
+          color:"sienna",
           width:15,
           height:15
         };
@@ -31,7 +31,63 @@
           ctx.restore();
           }
       };
-      drawSnake(100,100,1);
+      //drawSnake(100,100,0);
+      snakeFood={
+        color:"CadetBlue",
+        width:25,
+        height:25
+      };
+      drawFood=function(sf,counter) {
+        ctx.save();
+        if (counter==0) {
+          ctx.fillStyle=snakeFood.color;
+          ctx.beginPath();
+          ctx.arc(sf.x, sf.y, (snakeFood.width*0.3), 0, 2 * Math.PI);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fill();
+          ctx.restore();
+        }
+        // body...
+      }
+      startGame=function () {//initialise snake body and food
+        snakeBody=SnakeArr=[{x:230,y:200},{x:220,y:200},{x:210,y:200},{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200},{x:150,y:200}];
+        for (var i = 0; i < SnakeArr.length; i++) {
+        drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
+      }
+    }
+    startGame();
+    document.onkeydown=function(event){
+  if(event.keyCode==37){
+    direction=0;
+    console.log("pressed left");
+  }
+  else if(event.keyCode==38){
+    direction=1;
+    console.log("pressed up");
+  }
+  else if(event.keyCode==39){
+    direction=2;
+    console.log("pressed right");
+  }
+  else if(event.keyCode==40){
+    direction=3;
+    console.log("pressed down");
+  }
+  else if ((event.keyCode==32)&&(moving==true)) {//created this to stop game
+          console.log("spacebar");
+          clearInterval(myInter);
+          moving=false;
+          
+        }
+        else if ((event.keyCode==32)&&(moving==false)) {//created this to start game
+          console.log("spacebar to start");
+          myInter=setInterval(mainFunct,100);
+          moving=true;
+        }
+
+}
+      
   </script>
 
 </body>
