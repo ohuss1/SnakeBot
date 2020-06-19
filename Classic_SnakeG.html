@@ -12,12 +12,24 @@
     var ctx = document.getElementById('ctx').getContext('2d');
         var CanHeight=500;
         var CanWidth=500;
+        var direction;
+        var moving;
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
           color:"sienna",
           width:15,
           height:15
         };
+        /*
+    AXIS OF CANVAS
+    X AXIX -> increases from 0
+    
+    Y AXIS  ^
+    Inccreases From
+           |
+          \|/
+           +
+      */
         drawSnake = function (x,y,counter){ ;
           ctx.save();
         if (counter==0) {
@@ -50,14 +62,77 @@
         }
         // body...
       }
+      oneStep=function(){
+for (var i = SnakeArr.length-1; i >= 0; i--) {//bug for loop had to be backwards cuz otherwise
+  //all end up on one spot 
+  if(direction==0){//if left pressed
+  if(SnakeArr[0].x>0){
+
+
+  if (i==0) {
+    SnakeArr[0].x=SnakeArr[0].x-5;
+  } 
+  else{
+    SnakeArr[i].x=SnakeArr[i-1].x;//of previous segment
+    SnakeArr[i].y=SnakeArr[i-1].y;
+  }
+  }
+
+  }
+    else if (direction == 1) {
+          //if pressed up
+          if (SnakeArr[0].y>0) {
+          if(i==0){
+              SnakeArr[i].y=SnakeArr[i].y-5;
+            }
+            else{
+            SnakeArr[i].x=SnakeArr[i-1].x;
+            SnakeArr[i].y=SnakeArr[i-1].y;
+            }
+          }
+        }
+          else if (direction == 2) {//if right pressed
+          if ((SnakeArr[0].x<490)) {
+          if(i==0){
+              SnakeArr[i].x=SnakeArr[i].x+5;
+            }
+            else{
+            SnakeArr[i].x=SnakeArr[i-1].x;
+            SnakeArr[i].y=SnakeArr[i-1].y;
+            }
+          }
+        }
+          else if (direction == 3) {//if down pressed
+          if ((SnakeArr[0].y<490)) {
+          if(i==0){
+              SnakeArr[i].y=SnakeArr[i].y+5;
+            }
+            else{
+            SnakeArr[i].x=SnakeArr[i-1].x;
+            SnakeArr[i].y=SnakeArr[i-1].y;
+            }
+          }
+          } 
+}
+}
+mainFunct=function () {//will get called every x millisecond
+  ctx.clearRect(0,0,500,500);
+  for (var i = 0; i < SnakeArr.length; i++) {
+    drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
+  }
+  oneStep();
+  moving=true;
+  // body...
+}
       startGame=function () {//initialise snake body and food
         snakeBody=SnakeArr=[{x:230,y:200},{x:220,y:200},{x:210,y:200},{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200},{x:150,y:200}];
         for (var i = 0; i < SnakeArr.length; i++) {
         drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
       }
+      myInter=setInterval(mainFunct,100);
     }
     startGame();
-    document.onkeydown=function(event){
+    document.onkeydown=function(event){//set direction
   if(event.keyCode==37){
     direction=0;
     console.log("pressed left");
@@ -87,6 +162,7 @@
         }
 
 }
+
       
   </script>
 
