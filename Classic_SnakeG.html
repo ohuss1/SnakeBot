@@ -14,6 +14,7 @@
         var CanWidth=500;
         var direction;
         var moving;
+        var eaten;
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
           color:"sienna",
@@ -120,12 +121,38 @@ mainFunct=function () {//will get called every x millisecond
   for (var i = 0; i < SnakeArr.length; i++) {
     drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
   }
+  while(eaten){//to select new coordinate if ffod was eaten
+          foodX=(Math.random()*485)+5;
+          foodY=(Math.random()*485)+5;
+          foodList[0].x=foodX;
+          foodList[0].y=foodY;
+          eaten=false;
+        }
+  foodList.forEach(drawFood);
+
   oneStep();
+  one=SnakeArr[0].x-foodList[0].x;
+        two=foodList[0].x-SnakeArr[0].x;
+        three=SnakeArr[0].y-foodList[0].y;
+        four=foodList[0].y-SnakeArr[0].y;
+
+        if(((one<15&&one>0)||(two<15&&two>0))&&(((three)<15&&three>0)||(four<15&&four>0))){//if now head near food
+        // on next frame 
+          //food will appear some where else
+          console.log("inside if of eaten");
+          console.log(one);
+          console.log(two);
+          console.log(three);
+          console.log(four);
+          eaten=true;
+        }
   moving=true;
   // body...
 }
       startGame=function () {//initialise snake body and food
         snakeBody=SnakeArr=[{x:230,y:200},{x:220,y:200},{x:210,y:200},{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200},{x:150,y:200}];
+        eaten=true;
+        foodList=[{x:100,y:100}];
         for (var i = 0; i < SnakeArr.length; i++) {
         drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
       }
