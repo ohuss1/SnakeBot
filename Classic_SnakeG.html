@@ -156,7 +156,7 @@ mainFunct=function () {//will get called every x millisecond
         for (var i = 0; i < SnakeArr.length; i++) {
         drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
       }
-      myInter=setInterval(mainFunct,100);
+      myInter=setInterval(mainFunct,50);
     }
     startGame();
     document.onkeydown=function(event){//set direction
@@ -184,7 +184,7 @@ mainFunct=function () {//will get called every x millisecond
         }
         else if ((event.keyCode==32)&&(moving==false)) {//created this to start game
           console.log("spacebar to start");
-          myInter=setInterval(mainFunct,100);
+          myInter=setInterval(mainFunct,50);
           moving=true;
         }
 
