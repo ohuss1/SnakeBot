@@ -19,6 +19,11 @@
         var moving;
         var eaten;
         var score;
+        let SnakeArr=[{x:230,y:200},{x:220,y:200},{x:210,y:200},{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200},{x:150,y:200}];
+        var SnakeArrLastIndex=8;
+        var SnakeArrLastInX;
+        var SnakeArrLastInY;
+        var SnakeArrAfterL=9;
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
           color:"sienna",
@@ -66,6 +71,9 @@
           ctx.restore();
         }
         // body...
+      }
+      function addSeg(x,y){
+        SnakeArr.push({x,y});
       }
       drawScore=function(scoreG){
         ctx.save();
@@ -158,6 +166,16 @@ mainFunct=function () {//will get called every x millisecond
           //console.log(four);
           eaten=true;
           score=score+1;
+          if (eaten) {
+          SnakeArrLastInX=SnakeArr[SnakeArrLastIndex].x;
+          SnakeArrLastInY=SnakeArr[SnakeArrLastIndex].y;
+          addSeg(SnakeArrLastInX+10,SnakeArrLastInY+10);
+          //SnakeArr.push={x:(SnakeArrLastInX+10),y:(SnakeArrLastInY+10)};
+
+          SnakeArrLastIndex++;
+          SnakeArrAfterL++;
+          console.log("length increased");
+        }
 
         }
   moving=true;
