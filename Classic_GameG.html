@@ -4,6 +4,7 @@
   <title>
     Classic Snake
   </title>
+  <meta charset="UTF-8">
 </head>
 <body>
   <canvas height="500" width="500" id="ctx" style="border: 4px solid Brown;">
@@ -19,7 +20,7 @@
         var moving;
         var eaten;
         var score;
-        let SnakeArr=[{x:230,y:200},{x:220,y:200},{x:210,y:200},{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200},{x:150,y:200}];
+        let SnakeArr=[{x:230,y:5},{x:220,y:5},{x:210,y:5},{x:200,y:5},{x:190,y:5},{x:180,y:5},{x:170,y:5},{x:160,y:5},{x:150,y:5}];
         var SnakeArrLastIndex=8;
         var SnakeArrLastInX;
         var SnakeArrLastInY;
@@ -30,6 +31,7 @@
           width:13,
           height:13
         };
+        let HeadCoord=[{x:230,y:5}]
         /*
     AXIS OF CANVAS
     X AXIX -> increases from 0
@@ -80,6 +82,11 @@
         ctx.font = "30px Comic Sans MS";
         ctx.fillStyle = "black";
         ctx.fillText("Score: "+scoreG, 10, 50);
+        ctx.restore();
+        ctx.save();
+        ctx.font = "20px Comic Sans MS";
+        ctx.fillStyle = "black";
+        ctx.fillText("Coord:x:"+HeadCoord[0].x+" y:"+HeadCoord[0].y, 310, 50);
         ctx.restore();
       }
       oneStep=function(){
@@ -140,6 +147,9 @@ mainFunct=function () {//will get called every x millisecond
   for (var i = 0; i < SnakeArr.length; i++) {
     drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
   }
+  HeadCoord[0].x=SnakeArr[0].x;
+  HeadCoord[0].y=SnakeArr[0].y;
+
   drawScore(score);
   while(eaten){//to select new coordinate if ffod was eaten
           foodX=(Math.random()*485)+5;
@@ -182,7 +192,7 @@ mainFunct=function () {//will get called every x millisecond
   // body...
 }
       startGame=function () {//initialise snake body and food
-        snakeBody=SnakeArr=[{x:230,y:200},{x:220,y:200},{x:210,y:200},{x:200,y:200},{x:190,y:200},{x:180,y:200},{x:170,y:200},{x:160,y:200},{x:150,y:200}];
+        snakeBody=SnakeArr=[{x:230,y:5},{x:220,y:5},{x:210,y:5},{x:200,y:5},{x:190,y:5},{x:180,y:5},{x:170,y:5},{x:160,y:5},{x:150,y:5}];
         score=0;
         eaten=false;
         foodList=[{x:100,y:100}];
