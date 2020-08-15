@@ -4,9 +4,58 @@
   <title>
     Classic Snake
   </title>
+  <style>
+#Stats {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 30%;
+}
+
+#Stats td, #Stats th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
+#Stats tr:nth-child(even){background-color: #f2f2f2;}
+
+#Stats th {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
   <meta charset="UTF-8">
 </head>
-<body>
+<body><!-- Stats table below -->
+	<div id="myTable">
+		<table id="Stats" align="right" style="padding-right: 100px; margin-right: 2%">
+  <tr>
+    <th>Company</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  <tr>
+    <td>Berglunds snabbköp</td>
+    <td>Christina Berglund</td>
+    <td>Sweden</td>
+  </tr>
+</table>
+	</div>
+	
+
+
+
+	<section id="GameStats">
+			<p id="Score" style="font-family: Comic Sans MS;font-size:22px;font-weight: 550">Score</p>
+	</section>
   <canvas height="210" width="210" id="ctx" style="border: 4px solid Brown;">
   </canvas>
   <script type="text/javascript">
@@ -25,7 +74,13 @@
         var SnakeArrLastInX;
         var SnakeArrLastInY;
         var SnakeArrAfterL=9;
-        var up=1;down=3;left=0,right=2;
+        var up=1;down=3;left=0,right=2;//to change direction within snippet
+        var minX=0;maxX=0;minY=0;maxY=0;
+        minX=Math.random() * (CanWidth-15 - minX) + 4;//set minX 4 just in case random no is 0
+        maxX=Math.random() * (CanWidth-15 - minX) + minX;//use minX to set maxX
+        //Math.random()*(CanWidth-15)+5;
+        minY=Math.random() * (CanWidth-15 - minY) + 4;//set minX 4 just in case random no is 0
+        maxY=Math.random() * (CanWidth-15 - minY) + minY;//use minX to set maxX
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
           color:"sienna",
@@ -150,11 +205,11 @@ mainFunct=function () {//will get called every x millisecond
   }
   HeadCoord[0].x=SnakeArr[0].x;
   HeadCoord[0].y=SnakeArr[0].y;
-
+  document.getElementById("Score").innerHTML=("Score: "+(score));
   drawScore(score);
   while(eaten){//to select new coordinate if ffod was eaten
-          foodX=(Math.random()*195)+5;//15 less then canvaswidth
-          foodY=(Math.random()*195)+5;
+          foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
+          foodY=(Math.random()*(CanWidth-15))+5;
           foodList[0].x=foodX;
           foodList[0].y=foodY;
           eaten=false;
