@@ -65,6 +65,9 @@
         var bG=document.querySelector("#ctx")//background
         bG.style.background="url('https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80')";
         bG.style.backgroundSize="210px 210px";
+        function getRandomInt(max) {
+        	return Math.floor(Math.random() * Math.floor(max));
+        }
         var direction;
         var moving;
         var eaten;
@@ -75,12 +78,70 @@
         var SnakeArrLastInY;
         var SnakeArrAfterL=9;
         var up=1;down=3;left=0,right=2;//to change direction within snippet
-        var minX=0;maxX=0;minY=0;maxY=0;
-        minX=Math.random() * (CanWidth-15 - minX) + 4;//set minX 4 just in case random no is 0
-        maxX=Math.random() * (CanWidth-15 - minX) + minX;//use minX to set maxX
+
+        //Variables between this and below are for food region
+        var minX=0;maxX=0;minY=0;maxY=0;//
+        var max=CanWidth-15;
+        var RegionWid;
+        var minWH=15;
+        minX=getRandomInt((CanWidth-15 - minX));//set minX 4 just in case random no is 0
+        var preMaxX=getRandomInt((CanWidth-15 - 0));
+        var preMaxY=getRandomInt((CanWidth-15 - 0));
+        //Variables between this and above are for food region
+        if(preMaxX<minX){
+        	console.log("inside if "+preMaxX+"<"+minX);
+        	if((minX-preMaxX)<minWH){
+        		console.log("inside second if");
+        		minX+=minWH;
+        	}
+        	maxX=minX;
+        	minX=preMaxX;
+        }
+        else if(preMaxX>minX){
+        	console.log("inside if "+preMaxX+">"+minX);
+        	if((preMaxX-minX)<minWH){
+        		console.log("inside second if");
+        		preMaxX+=minWH;
+
+        	}
+        	maxX=preMaxX;
+        	
+        }
+        else{//if equal
+        	console.log("inside if "+preMaxX+"="+minX);
+        	maxX=minX+minWH;
+        }
+
+        RegionWid=maxX-minX;
+        minY=getRandomInt((CanWidth-15 - minY));//set minX 4 just in case random no is 0
+        if(preMaxY<minY){
+        	console.log("inside if "+preMaxY+"<"+minY);
+        	if((minY-preMaxY)<minWH){
+        		console.log("inside second if");
+        		minY+=minWH;
+        	}
+        	maxY=minY;
+        	minY=preMaxY;
+        }
+        else if(preMaxY>minY){
+        	console.log("inside if "+preMaxY+">"+minY);
+        	if((preMaxY-minY)<minWH){
+        		console.log("inside second if");
+        		preMaxY+=minWH;
+
+        	}
+        	maxY=preMaxY;
+        	
+        }
+        else{//if equal
+        	console.log("inside if "+preMaxY+"="+minY);
+        	maxY=minY+minWH;
+        }
+
+        //maxX=Math.random() * (CanWidth-15 - minX) + minX;//use minX to set maxX
         //Math.random()*(CanWidth-15)+5;
-        minY=Math.random() * (CanWidth-15 - minY) + 4;//set minX 4 just in case random no is 0
-        maxY=Math.random() * (CanWidth-15 - minY) + minY;//use minX to set maxX
+        //minY=Math.random() * (CanWidth-15 - minY) + 4;//set minX 4 just in case random no is 0
+        //maxY=Math.random() * (CanWidth-15 - minY) + minY;//use minX to set maxX
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
           color:"sienna",
@@ -111,11 +172,20 @@
           ctx.restore();
           }
       };
+      drawFRegion=function(minX,maxY,maxX,minY){
+      	ctx.save();
+      	ctx.beginPath();
+      	ctx.lineWidth = "1";
+      	ctx.strokeStyle = "blue";
+      	ctx.rect(minX, minY, RegionWid, (maxY-minY));
+      	ctx.stroke();
+      	ctx.restore();
+      }
       //drawSnake(100,100,0);
       snakeFood={
         color:"CadetBlue",
-        width:25,
-        height:25
+        width:15,
+        height:15
       };
       drawFood=function(sf,counter) {
         ctx.save();
@@ -200,6 +270,7 @@ for (var i = SnakeArr.length-1; i >= 0; i--) {//bug for loop had to be backwards
 }
 mainFunct=function () {//will get called every x millisecond
   ctx.clearRect(0,0,CanHeight,CanWidth);
+  drawFRegion(minX,maxY,maxX,minY);
   for (var i = 0; i < SnakeArr.length; i++) {
     drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
   }
@@ -208,50 +279,39 @@ mainFunct=function () {//will get called every x millisecond
   document.getElementById("Score").innerHTML=("Score: "+(score));
   drawScore(score);
   while(eaten){//to select new coordinate if ffod was eaten
-          foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
-          foodY=(Math.random()*(CanWidth-15))+5;
+          //foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
+          //foodY=(Math.random()*(CanWidth-15))+5;
+          foodX=Math.random() * (maxX - minX) + minX;//food will appear within region
+          foodY=Math.random() * (maxY - minY) + minY;
           foodList[0].x=foodX;
           foodList[0].y=foodY;
           eaten=false;
         }
   foodList.forEach(drawFood);
-
   oneStep();
   one=SnakeArr[0].x-foodList[0].x;
-        two=foodList[0].x-SnakeArr[0].x;
-        three=SnakeArr[0].y-foodList[0].y;
-        four=foodList[0].y-SnakeArr[0].y;
-
-        if(((one<15&&one>0)||(two<15&&two>0))&&(((three)<15&&three>0)||(four<15&&four>0))){//if now head near food
-        // on next frame 
-          //food will appear some where else
-          //console.log("inside if of eaten");
-          //console.log(one);
-          //console.log(two);
-          //console.log(three);
-          //console.log(four);
-          eaten=true;
-          score=score+1;
-          if (eaten) {
-          SnakeArrLastInX=SnakeArr[SnakeArrLastIndex].x;
-          SnakeArrLastInY=SnakeArr[SnakeArrLastIndex].y;
-          //addSeg(SnakeArrLastInX+10,SnakeArrLastInY+10);Removed to allow bot to move easily
-          //SnakeArr.push={x:(SnakeArrLastInX+10),y:(SnakeArrLastInY+10)};
-
-          SnakeArrLastIndex++;
-          SnakeArrAfterL++;
-          console.log("length increased");
+  two=foodList[0].x-SnakeArr[0].x;
+  three=SnakeArr[0].y-foodList[0].y;
+  four=foodList[0].y-SnakeArr[0].y;
+  if(((one<12&&one>0)||(two<12&&two>0))&&(((three)<12&&three>0)||(four<12&&four>0))){
+  	eaten=true;
+    score=score+1;
+    if (eaten) {
+    	SnakeArrLastIndex++;
+        SnakeArrAfterL++;
+        console.log("length increased");
         }
-
         }
-  moving=true;
+        moving=true;
   // body...
 }
       startGame=function () {//initialise snake body and food
         snakeBody=SnakeArr=[{x:130,y:5},{x:120,y:5},{x:110,y:5},{x:100,y:5},{x:90,y:5},{x:80,y:5},{x:70,y:5},{x:60,y:5},{x:50,y:5}];
         score=0;
         eaten=false;
-        foodList=[{x:100,y:100}];
+        foodX=Math.random() * (maxX - minX) + minX;//food will appear within region
+        foodY=Math.random() * (maxY - minY) + minY;
+        foodList=[{x:foodX,y:foodY}];
         for (var i = 0; i < SnakeArr.length; i++) {
         drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
       }
