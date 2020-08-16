@@ -72,7 +72,7 @@
         var moving;
         var eaten;
         var score;
-        let SnakeArr=[{x:130,y:5},{x:120,y:5},{x:110,y:5},{x:100,y:5},{x:90,y:5},{x:80,y:5},{x:70,y:5},{x:60,y:5},{x:50,y:5}];
+        let SnakeArr=[{x:85,y:3},{x:75,y:3},{x:65,y:3},{x:55,y:3},{x:45,y:3},{x:35,y:3},{x:25,y:3},{x:15,y:3},{x:5,y:3}];
         var SnakeArrLastIndex=8;
         var SnakeArrLastInX;
         var SnakeArrLastInY;
@@ -87,6 +87,9 @@
         minX=getRandomInt((CanWidth-15 - minX));//set minX 4 just in case random no is 0
         var preMaxX=getRandomInt((CanWidth-15 - 0));
         var preMaxY=getRandomInt((CanWidth-15 - 0));
+        var movedDown=false;
+        var movedUp=false;
+        var movingUp=false;
         //Variables between this and above are for food region
         if(preMaxX<minX){
         	console.log("inside if "+preMaxX+"<"+minX);
@@ -149,6 +152,10 @@
           height:13
         };
         let HeadCoord=[{x:130,y:5}]
+        var SnakeX=HeadCoord[0].x;
+        var SnakeY=HeadCoord[0].y;
+        var PrevSnakeX=0;
+        var PrevSnakeY=0;
         /*
     AXIS OF CANVAS
     X AXIX --->>> increases from 0
@@ -215,6 +222,10 @@
         ctx.fillText("Coord:x:"+HeadCoord[0].x+" y:"+HeadCoord[0].y, 85, 30);
         ctx.restore();
       }
+      changeDir=function(mydirection) {
+      	// body...
+      	direction=mydirection;
+      }
       oneStep=function(){
 for (var i = SnakeArr.length-1; i >= 0; i--) {//bug for loop had to be backwards cuz otherwise
   //all end up on one spot 
@@ -276,6 +287,8 @@ mainFunct=function () {//will get called every x millisecond
   }
   HeadCoord[0].x=SnakeArr[0].x;
   HeadCoord[0].y=SnakeArr[0].y;
+  SnakeX=HeadCoord[0].x;
+  SnakeY=HeadCoord[0].y;
   document.getElementById("Score").innerHTML=("Score: "+(score));
   drawScore(score);
   while(eaten){//to select new coordinate if ffod was eaten
@@ -288,6 +301,83 @@ mainFunct=function () {//will get called every x millisecond
           eaten=false;
         }
   foodList.forEach(drawFood);
+  //AI
+
+  //AI
+  if(PrevSnakeY<SnakeY){//AI
+  	console.log("changed movedDwn");
+  	movedDown=true;
+  }
+  if(PrevSnakeY>SnakeY){//AI
+  	console.log("changed movedUp");
+  	movedUp=true;
+  }
+  ///Testing AI below SEEMS LIKE CANT USE WHILE LOOP inside setInterval 
+  if((SnakeY<195)&&(movingUp==false)){
+  	if(SnakeX>190&&SnakeX<CanWidth && (movedDown==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	direction=down;
+  }
+  if(SnakeX>190&&SnakeX<CanWidth && (movedDown==true)){
+  	console.log("going left");
+  	direction=left;
+  	PrevSnakeY=SnakeY;
+  	movedDown=false;
+  }
+  if(SnakeX>0&&SnakeX<8 && (movedDown==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	//movedDown=true;
+  	direction=down;
+  }
+  if(SnakeX>0&&SnakeX<8 && (movedDown==true)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going right");
+  	movedDown=false;
+  	direction=right;
+  }
+  }
+  if(SnakeY>195){
+  	movingUp=true;
+  }
+  if(SnakeY>10&&movingUp==true){
+  	if(SnakeX>190&&SnakeX<CanWidth && (movedUp==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	direction=up;
+  }
+  if(SnakeX>190&&SnakeX<CanWidth && (movedUp==true)){
+  	console.log("going left");
+  	direction=left;
+  	PrevSnakeY=SnakeY;
+  	movedUp=false;
+  }
+  if(SnakeX>0&&SnakeX<8 && (movedUp==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	//movedDown=true;
+  	direction=up;
+  }
+  if(SnakeX>0&&SnakeX<8 && (movedUp==true)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going right");
+  	movedUp=false;
+  	direction=right;
+  }
+  }
+  if(SnakeY<5){
+  	movingUp=false;
+  }
+  
+
+  ///Testing AI above
   oneStep();
   one=SnakeArr[0].x-foodList[0].x;
   two=foodList[0].x-SnakeArr[0].x;
@@ -299,19 +389,24 @@ mainFunct=function () {//will get called every x millisecond
     if (eaten) {
     	SnakeArrLastIndex++;
         SnakeArrAfterL++;
-        console.log("length increased");
+        //console.log("length increased");
         }
         }
         moving=true;
   // body...
 }
       startGame=function () {//initialise snake body and food
-        snakeBody=SnakeArr=[{x:130,y:5},{x:120,y:5},{x:110,y:5},{x:100,y:5},{x:90,y:5},{x:80,y:5},{x:70,y:5},{x:60,y:5},{x:50,y:5}];
+        snakeBody=SnakeArr=[{x:85,y:3},{x:75,y:3},{x:65,y:3},{x:55,y:3},{x:45,y:3},{x:35,y:3},{x:25,y:3},{x:15,y:3},{x:5,y:3}];
         score=0;
         eaten=false;
         foodX=Math.random() * (maxX - minX) + minX;//food will appear within region
         foodY=Math.random() * (maxY - minY) + minY;
         foodList=[{x:foodX,y:foodY}];
+        //Starting AI direction
+        direction=right;
+        PrevSnakeY=SnakeY;
+        movingUp=false;
+        //Starting AI direction
         for (var i = 0; i < SnakeArr.length; i++) {
         drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
       }
