@@ -100,18 +100,18 @@
 
         //Variables between this and above are for food region
         if(preMaxX<minX){
-        	console.log("inside if "+preMaxX+"<"+minX);
+        	//console.log("inside if "+preMaxX+"<"+minX);
         	if((minX-preMaxX)<minWH){
-        		console.log("inside second if");
+        		//console.log("inside second if");
         		minX+=minWH;
         	}
         	maxX=minX;
         	minX=preMaxX;
         }
         else if(preMaxX>minX){
-        	console.log("inside if "+preMaxX+">"+minX);
+        	//console.log("inside if "+preMaxX+">"+minX);
         	if((preMaxX-minX)<minWH){
-        		console.log("inside second if");
+        		//console.log("inside second if");
         		preMaxX+=minWH;
 
         	}
@@ -119,25 +119,25 @@
         	
         }
         else{//if equal
-        	console.log("inside if "+preMaxX+"="+minX);
+        	//console.log("inside if "+preMaxX+"="+minX);
         	maxX=minX+minWH;
         }
 
         RegionWid=maxX-minX;
         minY=getRandomInt((CanWidth-15 - minY));//set minX 4 just in case random no is 0
         if(preMaxY<minY){
-        	console.log("inside if "+preMaxY+"<"+minY);
+        	//console.log("inside if "+preMaxY+"<"+minY);
         	if((minY-preMaxY)<minWH){
-        		console.log("inside second if");
+        		//console.log("inside second if");
         		minY+=minWH;
         	}
         	maxY=minY;
         	minY=preMaxY;
         }
         else if(preMaxY>minY){
-        	console.log("inside if "+preMaxY+">"+minY);
+        	//console.log("inside if "+preMaxY+">"+minY);
         	if((preMaxY-minY)<minWH){
-        		console.log("inside second if");
+        		//console.log("inside second if");
         		preMaxY+=minWH;
 
         	}
@@ -362,38 +362,38 @@ mainFunct=function () {//will get called every x millisecond
 
   //AI
   if(PrevSnakeY<SnakeY){//AI
-  	console.log("changed movedDwn");
+  	//console.log("changed movedDwn");
   	movedDown=true;
   }
   if(PrevSnakeY>SnakeY){//AI
-  	console.log("changed movedUp");
+  	//console.log("changed movedUp");
   	movedUp=true;
   }
   ///Testing AI below SEEMS LIKE CANT USE WHILE LOOP inside setInterval 
-  if((SnakeY<195)&&(movingUp==false)&&(score<20)){
+  if((SnakeY<195)&&(movingUp==false)&&(score<=20)){
   	if(SnakeX>190&&SnakeX<CanWidth && (movedDown==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	direction=down;
   }
   if(SnakeX>190&&SnakeX<CanWidth && (movedDown==true)){
-  	console.log("going left");
+  	//console.log("going left");
   	direction=left;
   	PrevSnakeY=SnakeY;
   	movedDown=false;
   }
   if(SnakeX>0&&SnakeX<8 && (movedDown==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	//movedDown=true;
   	direction=down;
   }
   if(SnakeX>0&&SnakeX<8 && (movedDown==true)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going right");
+  	//console.log("going right");
   	movedDown=false;
   	direction=right;
   }
@@ -401,90 +401,90 @@ mainFunct=function () {//will get called every x millisecond
   if((SnakeY<foodTableStats.maxY.value)&&(movingUp==false)&&(score>20)){
   	//region FOund!!
   	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	direction=down;
   }
   if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==true)){
-  	console.log("going left");
+  	//console.log("going left");
   	direction=left;
   	PrevSnakeY=SnakeY;
   	movedDown=false;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedDown==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	//movedDown=true;
   	direction=down;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedDown==true)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going right");
+  	//console.log("going right");
   	movedDown=false;
   	direction=right;
   }
   }
-  if(SnakeY>195 && score<20){
+  if(SnakeY>195 && score<=20){
   	movingUp=true;
   }
     if(SnakeY>foodTableStats.maxY.value && score>20){
   	movingUp=true;
   }
-  if(SnakeY>10&&movingUp==true &&(score<20)){
+  if(SnakeY>10&&movingUp==true &&(score<=20)){
   	if(SnakeX>190&&SnakeX<CanWidth && (movedUp==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	direction=up;
   }
   if(SnakeX>190&&SnakeX<CanWidth && (movedUp==true)){
-  	console.log("going left");
+  	//console.log("going left");
   	direction=left;
   	PrevSnakeY=SnakeY;
   	movedUp=false;
   }
   if(SnakeX>0&&SnakeX<8 && (movedUp==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	//movedDown=true;
   	direction=up;
   }
   if(SnakeX>0&&SnakeX<8 && (movedUp==true)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going right");
+  	//console.log("going right");
   	movedUp=false;
   	direction=right;
   }
   }
   if(SnakeY>foodTableStats.minY.value&&movingUp==true &&(score>20)){
   	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	direction=up;
   }
   if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==true)){
-  	console.log("going left");
+  	//console.log("going left");
   	direction=left;
   	PrevSnakeY=SnakeY;
   	movedUp=false;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedUp==false)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going down");
+  	//console.log("going down");
   	//movedDown=true;
   	direction=up;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedUp==true)){
-  	console.log("yesss");
+  	//console.log("yesss");
   	PrevSnakeY=SnakeY;
-  	console.log("going right");
+  	//console.log("going right");
   	movedUp=false;
   	direction=right;
   }
@@ -497,7 +497,7 @@ mainFunct=function () {//will get called every x millisecond
   if(SnakeY<foodTableStats.minY.value && score>20){
   	movingUp=false;
   }
-  if(SnakeY<5 && score<40){
+  if(SnakeY<5 && score<=20){
   	movingUp=false;
   }
 
@@ -557,28 +557,28 @@ mainFunct=function () {//will get called every x millisecond
     document.onkeydown=function(event){//set direction
   if(event.keyCode==37){
     direction=0;
-    console.log("pressed left");
+    //console.log("pressed left");
   }
   else if(event.keyCode==38){
     direction=1;
-    console.log("pressed up");
+    //console.log("pressed up");
   }
   else if(event.keyCode==39){
     direction=2;
-    console.log("pressed right");
+    //console.log("pressed right");
   }
   else if(event.keyCode==40){
     direction=3;
-    console.log("pressed down");
+    //console.log("pressed down");
   }
   else if ((event.keyCode==32)&&(moving==true)) {//created this to stop game
-          console.log("spacebar");
+          //console.log("spacebar");
           clearInterval(myInter);
           moving=false;
           
         }
         else if ((event.keyCode==32)&&(moving==false)) {//created this to start game
-          console.log("spacebar to start");
+          //console.log("spacebar to start");
           myInter=setInterval(mainFunct,50);
           moving=true;
         }
