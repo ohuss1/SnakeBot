@@ -370,7 +370,7 @@ mainFunct=function () {//will get called every x millisecond
   	movedUp=true;
   }
   ///Testing AI below SEEMS LIKE CANT USE WHILE LOOP inside setInterval 
-  if((SnakeY<195)&&(movingUp==false)){
+  if((SnakeY<195)&&(movingUp==false)&&(score<20)){
   	if(SnakeX>190&&SnakeX<CanWidth && (movedDown==false)){
   	console.log("yesss");
   	PrevSnakeY=SnakeY;
@@ -398,10 +398,42 @@ mainFunct=function () {//will get called every x millisecond
   	direction=right;
   }
   }
-  if(SnakeY>195){
+  if((SnakeY<foodTableStats.maxY.value)&&(movingUp==false)&&(score>20)){
+  	//region FOund!!
+  	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	direction=down;
+  }
+  if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==true)){
+  	console.log("going left");
+  	direction=left;
+  	PrevSnakeY=SnakeY;
+  	movedDown=false;
+  }
+  if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedDown==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	//movedDown=true;
+  	direction=down;
+  }
+  if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedDown==true)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going right");
+  	movedDown=false;
+  	direction=right;
+  }
+  }
+  if(SnakeY>195 && score<20){
   	movingUp=true;
   }
-  if(SnakeY>10&&movingUp==true){
+    if(SnakeY>foodTableStats.maxY.value && score>20){
+  	movingUp=true;
+  }
+  if(SnakeY>10&&movingUp==true &&(score<20)){
   	if(SnakeX>190&&SnakeX<CanWidth && (movedUp==false)){
   	console.log("yesss");
   	PrevSnakeY=SnakeY;
@@ -429,11 +461,47 @@ mainFunct=function () {//will get called every x millisecond
   	direction=right;
   }
   }
-  if(SnakeY<5){
-  	movingUp=false;
+  if(SnakeY>foodTableStats.minY.value&&movingUp==true &&(score>20)){
+  	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	direction=up;
+  }
+  if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==true)){
+  	console.log("going left");
+  	direction=left;
+  	PrevSnakeY=SnakeY;
+  	movedUp=false;
+  }
+  if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedUp==false)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going down");
+  	//movedDown=true;
+  	direction=up;
+  }
+  if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedUp==true)){
+  	console.log("yesss");
+  	PrevSnakeY=SnakeY;
+  	console.log("going right");
+  	movedUp=false;
+  	direction=right;
+  }
   }
   
+  //below for high score part where goes to region found
 
+
+  
+  if(SnakeY<foodTableStats.minY.value && score>20){
+  	movingUp=false;
+  }
+  if(SnakeY<5 && score<40){
+  	movingUp=false;
+  }
+
+//above for high score part where goes to region found
   ///Testing AI above
   oneStep();
   one=SnakeArr[0].x-foodList[0].x;//head to food dist ie for positive and negative numbers
