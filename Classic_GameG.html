@@ -8,7 +8,7 @@
 #Stats {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  width: 30%;
+  width: 20%;
 }
 
 #Stats td, #Stats th {
@@ -20,8 +20,8 @@
 #Stats tr:nth-child(even){background-color: #f2f2f2;}
 
 #Stats th {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   text-align: left;
   background-color: #4CAF50;
   color: white;
@@ -33,19 +33,24 @@
 	<div id="myTable">
 		<table id="Stats" align="right" style="padding-right: 100px; margin-right: 2%">
   <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
+    <th>MnFdSampleX</th>
+    <th>MxFdSampleX</th>
+    <th>MnFdSampleY</th>
+    <th>MxFdSampleY</th>
+    <th>MnFdActualX</th>
+    <th>MxFdActualX</th>
+    <th>MnFdActualY</th>
+    <th>MxFdActualY</th>
   </tr>
   <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Berglunds snabbköp</td>
-    <td>Christina Berglund</td>
-    <td>Sweden</td>
+    <td id="mnX"></td>
+    <td id="mxX"></td>
+    <td id="mnY"></td>
+    <td id="mxY"></td>
+    <td id="col1">Maria Anders</td>
+    <td id="col2">Germany</td>
+    <td id="col3">Alfreds Futterkiste</td>
+    <td id="col4">Alfreds Futterkiste</td>
   </tr>
 </table>
 	</div>
@@ -68,6 +73,7 @@
         function getRandomInt(max) {
         	return Math.floor(Math.random() * Math.floor(max));
         }
+        var one=0;two=0;three=0;four=0
         var direction;
         var moving;
         var eaten;
@@ -90,6 +96,8 @@
         var movedDown=false;
         var movedUp=false;
         var movingUp=false;
+        var foodEatingDistance=5;
+
         //Variables between this and above are for food region
         if(preMaxX<minX){
         	console.log("inside if "+preMaxX+"<"+minX);
@@ -141,10 +149,35 @@
         	maxY=minY+minWH;
         }
 
-        //maxX=Math.random() * (CanWidth-15 - minX) + minX;//use minX to set maxX
-        //Math.random()*(CanWidth-15)+5;
-        //minY=Math.random() * (CanWidth-15 - minY) + 4;//set minX 4 just in case random no is 0
-        //maxY=Math.random() * (CanWidth-15 - minY) + minY;//use minX to set maxX
+        //Below changing elements to actual values found
+        
+        document.getElementById("col1").innerHTML=minX;
+        document.getElementById("col2").innerHTML=maxX;
+        document.getElementById("col3").innerHTML=minY;
+        document.getElementById("col4").innerHTML=maxY;
+        //Object below tells us status of table to know values of food entered or not
+        foodTableStats={
+        	minX: {
+            value:undefined,
+            boolEntered:false
+        },
+        maxX: {
+            value:undefined,
+            boolEntered:false
+        },
+        minY: {
+            value:undefined,
+            boolEntered:false
+        },
+        maxY: {
+            value:undefined,
+            boolEntered:false
+        } 
+        };
+        
+        //Above is for table elements
+
+
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
           //array will contain coordinatees for each cell
           color:"sienna",
@@ -294,6 +327,30 @@ mainFunct=function () {//will get called every x millisecond
   while(eaten){//to select new coordinate if ffod was eaten
           //foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
           //foodY=(Math.random()*(CanWidth-15))+5;
+          //Below is the bot part
+          if(foodTableStats.minX.boolEntered==false || foodTableStats.minX.value>SnakeX){
+          	document.getElementById('mnX').innerHTML=SnakeX;
+          	foodTableStats.minX.boolEntered=true;
+          	foodTableStats.minX.value=SnakeX;
+          }
+          else if((foodTableStats.minX.boolEntered==true && foodTableStats.maxX.boolEntered==false)||foodTableStats.maxX.value<SnakeX ){
+          	document.getElementById('mxX').innerHTML=SnakeX;
+          	foodTableStats.maxX.value=SnakeX;
+          	foodTableStats.maxX.boolEntered=true;
+          }
+          if(foodTableStats.minY.boolEntered==false || foodTableStats.minY.value>SnakeY){
+          	document.getElementById('mnY').innerHTML=SnakeY;
+          	foodTableStats.minY.boolEntered=true;
+          	foodTableStats.minY.value=SnakeY;
+          }
+          else if((foodTableStats.minY.boolEntered==true && foodTableStats.maxY.boolEntered==false)||foodTableStats.maxY.value<SnakeY ){
+          	document.getElementById('mxY').innerHTML=SnakeY;
+          	foodTableStats.maxY.value=SnakeY;
+          	foodTableStats.maxY.boolEntered=true;
+          }
+
+
+          //
           foodX=Math.random() * (maxX - minX) + minX;//food will appear within region
           foodY=Math.random() * (maxY - minY) + minY;
           foodList[0].x=foodX;
@@ -379,11 +436,12 @@ mainFunct=function () {//will get called every x millisecond
 
   ///Testing AI above
   oneStep();
-  one=SnakeArr[0].x-foodList[0].x;
-  two=foodList[0].x-SnakeArr[0].x;
+  one=SnakeArr[0].x-foodList[0].x;//head to food dist ie for positive and negative numbers
+  two=foodList[0].x-SnakeArr[0].x;//same as above for negative
   three=SnakeArr[0].y-foodList[0].y;
   four=foodList[0].y-SnakeArr[0].y;
-  if(((one<12&&one>0)||(two<12&&two>0))&&(((three)<12&&three>0)||(four<12&&four>0))){
+  if(direction==up||direction==down){//direction==down or up need more foodeating distance margin for xaxis error fix
+  	if(((one<(1.6*foodEatingDistance)&&one>0)||(two<(1.6*foodEatingDistance)&&two>0))&&(((three)<(foodEatingDistance)&&three>0)||(four<(foodEatingDistance)&&four>0))){
   	eaten=true;
     score=score+1;
     if (eaten) {
@@ -392,6 +450,21 @@ mainFunct=function () {//will get called every x millisecond
         //console.log("length increased");
         }
         }
+
+  }
+  else{//direction==right or left need more foodeating distance margin for yaxis error fix
+  	if(((one<foodEatingDistance&&one>0)||(two<foodEatingDistance&&two>0))&&(((three)<(1.6*foodEatingDistance)&&three>0)||(four<(1.6*foodEatingDistance)&&four>0))){
+  	eaten=true;
+    score=score+1;
+    if (eaten) {
+    	SnakeArrLastIndex++;
+        SnakeArrAfterL++;
+        //console.log("length increased");
+        }
+        }
+  }
+
+  
         moving=true;
   // body...
 }
@@ -410,7 +483,7 @@ mainFunct=function () {//will get called every x millisecond
         for (var i = 0; i < SnakeArr.length; i++) {
         drawSnake((SnakeArr[i].x),(SnakeArr[i].y),(i));
       }
-      myInter=setInterval(mainFunct,50);
+      myInter=setInterval(mainFunct,4);
     }
     startGame();
     document.onkeydown=function(event){//set direction
@@ -438,7 +511,7 @@ mainFunct=function () {//will get called every x millisecond
         }
         else if ((event.keyCode==32)&&(moving==false)) {//created this to start game
           console.log("spacebar to start");
-          myInter=setInterval(mainFunct,40);
+          myInter=setInterval(mainFunct,50);
           moving=true;
         }
 
