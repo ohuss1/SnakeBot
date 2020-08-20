@@ -83,14 +83,15 @@
         var SnakeArrLastInX;
         var SnakeArrLastInY;
         var SnakeArrAfterL=9;
-        var up=1;down=3;left=0,right=2;//to change direction within snippet
+        var up=1;down=3;left=0,right=2;//to change direction within javascript snippet(will remove bot and make into a javascript snippet which i will 
+		//paste in browser)
 
-        //Variables between this and below are for food region
-        var minX=0;maxX=0;minY=0;maxY=0;//
+        //Variables between this and below are for food region(the rectangle within which food is displayed)
+        var minX=0;maxX=0;minY=0;maxY=0;
         var max=CanWidth-15;
-        var RegionWid;
-        var minWH=15;
-        minX=getRandomInt((CanWidth-15 - minX));//set minX 4 just in case random no is 0
+        var RegionWid;//var needed to draw rectangle food region
+        var minWH=15;//minimum difference between maxX and minX that I want
+        minX=getRandomInt((CanWidth-15 - minX));
         var preMaxX=getRandomInt((CanWidth-15 - 0));
         var preMaxY=getRandomInt((CanWidth-15 - 0));
         var movedDown=false;
@@ -105,7 +106,7 @@
         		//console.log("inside second if");
         		minX+=minWH;
         	}
-        	maxX=minX;
+        	maxX=minX;//since minX was larger then preMaxX
         	minX=preMaxX;
         }
         else if(preMaxX>minX){
@@ -118,7 +119,7 @@
         	maxX=preMaxX;
         	
         }
-        else{//if equal
+        else{//if equal both preMaxX and minX are same
         	//console.log("inside if "+preMaxX+"="+minX);
         	maxX=minX+minWH;
         }
@@ -149,13 +150,13 @@
         	maxY=minY+minWH;
         }
 
-        //Below changing elements to actual values found
+        //Below changing elements to actual values found of the foodRegion (this is set only at beginning of a game)
         
         document.getElementById("col1").innerHTML=minX;
         document.getElementById("col2").innerHTML=maxX;
         document.getElementById("col3").innerHTML=minY;
         document.getElementById("col4").innerHTML=maxY;
-        //Object below tells us status of table to know values of food entered or not
+        //The Object below will tell us status of table to know values of food entered or not. Each time I change value in table I will update this as well
         foodTableStats={
         	minX: {
             value:undefined,
@@ -175,7 +176,7 @@
         } 
         };
         
-        //Above is for table elements
+        //Above object is for table elements
 
 
         snakeSeg={//will draw these segments for each cell in array(snake body will be composed of these segments)
@@ -199,7 +200,7 @@
           \|/
            +
       */
-        drawSnake = function (x,y,counter){ ;
+        drawSnake = function (x,y,counter){
           ctx.save();
         if (counter==0) {
           ctx.fillStyle='black';
@@ -398,7 +399,7 @@ mainFunct=function () {//will get called every x millisecond
   	direction=right;
   }
   }
-  if((SnakeY<foodTableStats.maxY.value)&&(movingUp==false)&&(score>20)){
+  if((SnakeY<foodTableStats.maxY.value)&&(movingUp==false)&&(score>20)&&(SnakeY>(foodTableStats.minY.value-10))){
   	//region FOund!!
   	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==false)){
   	//console.log("yesss");
