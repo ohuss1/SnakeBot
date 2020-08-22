@@ -186,21 +186,23 @@
           height:13
         };
         let HeadCoord=[{x:130,y:5}]
-        var SnakeX=HeadCoord[0].x;
+        var SnakeX=HeadCoord[0].x;//This SnakeX and SnakeY is head of snake that we will use to find if snake touching edge etc for our bot 
+		//purposes
         var SnakeY=HeadCoord[0].y;
-        var PrevSnakeX=0;
+        var PrevSnakeX=0;//These variables PrevSnakeX PrevSnakeY are used to know direction which
+		//snake is heading or in which snake moved These variables are for bot purposes as well
         var PrevSnakeY=0;
         /*
     AXIS OF CANVAS
     X AXIX --->>> increases from 0
     
     Y AXIS  ^
-    Inccreases From
+    Inccreases From 0
            |
           \|/
            +
       */
-        drawSnake = function (x,y,counter){
+        drawSnake = function (x,y,counter){//function will be called on all elements of snake
           ctx.save();
         if (counter==0) {
           ctx.fillStyle='black';
@@ -213,7 +215,7 @@
           ctx.restore();
           }
       };
-      drawFRegion=function(minX,maxY,maxX,minY){
+      drawFRegion=function(minX,maxY,maxX,minY){//draws rectangle within which food is displayed
       	ctx.save();
       	ctx.beginPath();
       	ctx.lineWidth = "1";
@@ -241,7 +243,9 @@
         }
         // body...
       }
-      function addSeg(x,y){
+      function addSeg(x,y){//This function was for increasing length but I removed this lenght functionality to prevent fast
+	  //moving snake bot from having errors and make it easy for the code to draw a small snake quickly
+	  //and move easily and make it easy to spot.(I selected max speed for bot from the setInterval)
         SnakeArr.push({x,y});
       }
       drawScore=function(scoreG){
@@ -260,7 +264,8 @@
       	// body...
       	direction=mydirection;
       }
-      oneStep=function(){
+      oneStep=function(){//This function changes the coordinates of segments every iteration. The draw function then draw the 
+	  //snake accordingly
 for (var i = SnakeArr.length-1; i >= 0; i--) {//bug for loop had to be backwards cuz otherwise
   //all end up on one spot 
   if(direction==0){//if left pressed
@@ -328,7 +333,7 @@ mainFunct=function () {//will get called every x millisecond
   while(eaten){//to select new coordinate if ffod was eaten
           //foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
           //foodY=(Math.random()*(CanWidth-15))+5;
-          //Below is the bot part
+          //Below is the bot part this is responsible for recording the food coordinates to find the food region
           if(foodTableStats.minX.boolEntered==false || foodTableStats.minX.value>SnakeX){
           	document.getElementById('mnX').innerHTML=SnakeX;
           	foodTableStats.minX.boolEntered=true;
@@ -359,8 +364,23 @@ mainFunct=function () {//will get called every x millisecond
           eaten=false;
         }
   foodList.forEach(drawFood);
-  //AI
+  //BOT which scans canvas starts from here
+  
+  //1-BOT scans through canvas by moving snake line by line downwards and then line by line upwards.
+  //2-Locations of food are recorded to find minimum and max range within which food appears
+  //3-We use a score of >20 as a cutoff point for needed accuracy of region
+  //4-After score is >20 bot just scans the food region found just like it scanned canvas for food.
+  
+  //Below part is the part responsible for scanning through the canvas for food and scanning through foodRegion for food
+  //whe the food region is found
+  
+  //No need for while loop since setInterval which calls main function is already looping;
+  //so that is where our iterations or loops are coming from. So we use if statements
+  //PrevSnakeY is value stored from previous loop. Whereas SnakeY is snake's head position. So if snake is going down then obviously there will be difference
 
+  //We could use as alternative to PrevSnakeY, if direcrion=right and headX< right edge then keep going and if on >=right edge and direction =right then direction =down
+  //and for next iteration if direction =down and on right edge turn left
+  //Moving Up variable is when it scans canvas upwards
   //AI
   if(PrevSnakeY<SnakeY){//AI
   	//console.log("changed movedDwn");
@@ -371,7 +391,8 @@ mainFunct=function () {//will get called every x millisecond
   	movedUp=true;
   }
   ///Testing AI below SEEMS LIKE CANT USE WHILE LOOP inside setInterval 
-  if((SnakeY<195)&&(movingUp==false)&&(score<=20)){
+  //Below part of code we are scanning the canvas as we are going down...while region is not found ie. score<=20
+  if((SnakeY<195)&&(movingUp==false)&&(score<=20)){//Havent reached bottom of region ie. SnakeY<195
   	if(SnakeX>190&&SnakeX<CanWidth && (movedDown==false)){
   	//console.log("yesss");
   	PrevSnakeY=SnakeY;
@@ -382,7 +403,7 @@ mainFunct=function () {//will get called every x millisecond
   	//console.log("going left");
   	direction=left;
   	PrevSnakeY=SnakeY;
-  	movedDown=false;
+  	movedDown=false;//reseting value of moved down
   }
   if(SnakeX>0&&SnakeX<8 && (movedDown==false)){
   	//console.log("yesss");
@@ -399,6 +420,9 @@ mainFunct=function () {//will get called every x millisecond
   	direction=right;
   }
   }
+  
+  //Below part we found region (ie.score>=20 we consider it significant for region accuracy) we are scanning food region
+  //as we move down
   if((SnakeY<foodTableStats.maxY.value)&&(movingUp==false)&&(score>20)){
   	//region FOund!!
   	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==false)){
@@ -428,12 +452,17 @@ mainFunct=function () {//will get called every x millisecond
   	direction=right;
   }
   }
-  if(SnakeY>195 && score<=20){
+  
+  
+  
+  if(SnakeY>195 && score<=20){//Now since if SnakeY>195 we have to scan upwards now
   	movingUp=true;
   }
-    if(SnakeY>foodTableStats.maxY.value && score>20){
+    if(SnakeY>foodTableStats.maxY.value && score>20){//in case of food region if 
   	movingUp=true;
   }
+  
+  //Scanning canvas upwards for food from bottom food region hasnt been found ie. score<=20
   if(SnakeY>10&&movingUp==true &&(score<=20)){
   	if(SnakeX>190&&SnakeX<CanWidth && (movedUp==false)){
   	//console.log("yesss");
@@ -462,6 +491,8 @@ mainFunct=function () {//will get called every x millisecond
   	direction=right;
   }
   }
+  
+  //In this case scanning food region upward for food from bottom of food region
   if(SnakeY>foodTableStats.minY.value&&movingUp==true &&(score>20)){
   	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==false)){
   	//console.log("yesss");
@@ -491,20 +522,25 @@ mainFunct=function () {//will get called every x millisecond
   }
   }
   
-  //below for high score part where goes to region found
+ 
 
 
   
-  if(SnakeY<foodTableStats.minY.value && score>20){
+  if(SnakeY<foodTableStats.minY.value && score>20){//Reached top of food region so have to scan down food region for 
+  //food
   	movingUp=false;
   }
-  if(SnakeY<5 && score<=20){
+  if(SnakeY<5 && score<=20){//reached top of canvas so have to scan down canvas for food.
   	movingUp=false;
   }
 
 //above for high score part where goes to region found
-  ///Testing AI above
+  ///END OF BOT part
   oneStep();
+  
+  //Below we are finding distance between food and snakeHead. If it is within threshhold then we say eaten=true; and
+  //food will have to reappear somewhere else..note looks complicated because food is round so had to adjust if we eat it
+  //from bottom or top or side.
   one=SnakeArr[0].x-foodList[0].x;//head to food dist ie for positive and negative numbers
   two=foodList[0].x-SnakeArr[0].x;//same as above for negative
   three=SnakeArr[0].y-foodList[0].y;
