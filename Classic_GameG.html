@@ -26,6 +26,18 @@
   background-color: #4CAF50;
   color: white;
 }
+section.absolute {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  width: 45%;
+  height: 75%;
+  border: 3px solid #9a6767;
+  margin-top:1%;
+}
+body{
+background-color:#ab9696;
+}
 </style>
   <meta charset="UTF-8">
 </head>
@@ -59,7 +71,26 @@
 
 
 	<section id="GameStats">
-			<p id="Score" style="font-family: Comic Sans MS;font-size:22px;font-weight: 550">Score</p>
+			<p id="Score" style="font-family: Comic Sans MS;font-size:18px;font-weight: 350">Score</p>
+	</section>
+	<div class="center">
+	<h3 style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
+	Press Space to Pause/Resume the snake (at a lower speed).
+	</h3>
+	</div>
+	
+
+	<section id="About" class="absolute">
+	<h3 style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
+	In this Project food will appear randomly within a region that was chosen randomly at the begining of the game.
+	<br> <br>
+	We want the bot to find this region<br> <br>
+	The Snake will scan through the canvas line by line top to bottom and bottom to top and eat food found along the way
+	The Snake will record the minimum and maximum x and y values of food to locate the rectangular food region
+    When the score reaches >20 we will consider that the number of samples taken is adequate enough to for our forecasted 
+    region to be accurate
+	<br> <br>When Score reaches >20 we then simply only scan through this region to find our food which was the goal of the boot.	
+	</h3>
 	</section>
   <canvas height="210" width="210" id="ctx" style="border: 4px solid Brown;">
   </canvas>
@@ -616,7 +647,7 @@ mainFunct=function () {//will get called every x millisecond
         }
         else if ((event.keyCode==32)&&(moving==false)) {//created this to start game
           //console.log("spacebar to start");
-          myInter=setInterval(mainFunct,50);
+          myInter=setInterval(mainFunct,10);
           moving=true;
         }
 
