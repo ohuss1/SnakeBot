@@ -75,7 +75,7 @@ background-color:#ab9696;
 	</section>
 	<div class="center">
 	<h3 style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
-	Press Space to Pause/Resume the snake (at a lower speed).
+	Press Space to Pause/Resume the snake (at a lower speed).<br> If bot unable to scan through region try again by refreshing Ctrl + R
 	</h3>
 	</div>
 	
@@ -647,7 +647,7 @@ mainFunct=function () {//will get called every x millisecond
         }
         else if ((event.keyCode==32)&&(moving==false)) {//created this to start game
           //console.log("spacebar to start");
-          myInter=setInterval(mainFunct,10);
+          myInter=setInterval(mainFunct,8);
           moving=true;
         }
 
