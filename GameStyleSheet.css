@@ -39,7 +39,7 @@ bottom: -90%;
 .mycanvas{
  position:relative;
 /*bottom:0;*/
-/*left:0;*/
+left:1%;
 top: -20rem; 
 }
 body{
