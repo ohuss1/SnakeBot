@@ -1,6 +1,10 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <title>
     Classic Snake
   </title>
@@ -27,28 +31,43 @@
   color: white;
 }
 section.absolute {
-  position: absolute;
+  position: relative;
   top: 15%;
-  right: 5%;
+  /*right: 5%;*/
+  /*Relative position instead of absolute allows responsiveness*/
+  left: 53%;
   width: 45%;
   height: 75%;
   border: 3px solid #9a6767;
   margin-top:1%;
 }
-.note{
-position:absolute;
-bottom:0;
-left:0;
+div.note{
+position:relative;
+/*bottom:0;*/
+/*left:0;*/
+bottom: -90%;
+}
+.mycanvas{
+ position:relative;
+/*bottom:0;*/
+/*left:0;*/
+top: -20rem; 
 }
 body{
 background-color:#ab9696;
+}
+div.wrapW {
+  word-wrap: break-word;
+}
+.Instr{
+  padding-left: 0.5em;
 }
 </style>
   <meta charset="UTF-8">
 </head>
 <body><!-- Stats table below -->
-	<div id="myTable">
-		<table id="Stats" align="right" style="padding-right: 100px; margin-right: 2%">
+  <div id="myTable">
+    <table id="Stats" align="right" style="padding-right: 100px; margin-right: 2%">
   <tr>
     <th>MnFdSampleX</th>
     <th>MxFdSampleX</th>
@@ -70,40 +89,54 @@ background-color:#ab9696;
     <td id="col4">Alfreds Futterkiste</td>
   </tr>
 </table>
-	</div>
-	
+  </div>
+  
 
 
 
-	<section id="GameStats">
-			<p id="Score" style="font-family: Comic Sans MS;font-size:18px;font-weight: 350">Score</p>
-	</section>
-	<div class="center">
-	<h3 style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
-	Press Space to Pause/Resume the snake (at a lower speed).<br> If bot unable to scan through region try again by refreshing Ctrl + R
-	</h3>
-	</div>
-	<div class="note">
-	<h3 style="color:#952c2c; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
-	Originally I had intended to use pyautogui for the bot on this javascript snake but found it difficult to track a fast moving snake
-	</h3>
-	</div>
-	
+  <section id="GameStats">
+      <p id="Score" style="font-family: Comic Sans MS;font-size:18px;font-weight: 350">Score</p>
+  </section>
+  <div class="container-fluid px-0">
+    <div class="wrapW ">
+      <div class="center">
+  <h3 class="Instr" style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
+  Press 'g' to start Game<br>
+  Press Space to Pause/Resume the snake (at a lower speed).<br> If bot unable to scan through region try again by refreshing Ctrl + R
+  </h3>
+  </div>
+    
+  </div>
+  <div class="wrapW">
+    <div class="note">
+  <h3 class="Instr" style="color:#952c2c; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
+  Originally I had intended to use pyautogui for the bot on this javascript snake but found it difficult to track a fast moving snake
+  </h3>
+  </div>    
+  </div>
 
-	<section id="About" class="absolute">
-	<h3 style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
-	In this Project food will appear randomly within a region that was chosen randomly at the begining of the game.
-	<br> <br>
-	We want the bot to find this region<br> <br>
-	The Snake will scan through the canvas line by line top to bottom and bottom to top and eat food found along the way
-	The Snake will record the minimum and maximum x and y values of food to locate the rectangular food region
+  <div class="wrapW">
+      <section id="About" class="absolute">
+  <h3 style="color:White; font-family: Comic Sans MS;font-size:18px;font-weight: 550">
+  In this Project food will appear randomly within a region that was chosen randomly at the begining of the game.
+  <br> <br>
+  We want the bot to find this region<br> <br>
+  The Snake will scan through the canvas line by line top to bottom and bottom to top and eat food found along the way
+  The Snake will record the minimum and maximum x and y values of food to locate the rectangular food region
     When the score reaches >20 we will consider that the number of samples taken is adequate enough to for our forecasted 
     region to be accurate
-	<br> <br>When Score reaches >20 we then simply only scan through this region to find our food which was the goal of the boot.	
-	</h3>
-	</section>
-  <canvas height="210" width="210" id="ctx" style="border: 4px solid Brown;">
+  <br> <br>When Score reaches >20 we then simply only scan through this region to find our food which was the goal of the bot.  
+  </h3>
+  </section>
+
+  </div>
+    
+  
+
+     <<canvas class="mycanvas" height="210" width="210" id="ctx" style="border: 4px solid #cc6e6e;">
   </canvas>
+    </div>
+ 
   <script type="text/javascript">
     var ctx = document.getElementById('ctx').getContext('2d');
         var CanHeight=210;
@@ -112,7 +145,7 @@ background-color:#ab9696;
         bG.style.background="url('https://images.unsplash.com/photo-1483354483454-4cd359948304?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80')";
         bG.style.backgroundSize="210px 210px";
         function getRandomInt(max) {
-        	return Math.floor(Math.random() * Math.floor(max));
+          return Math.floor(Math.random() * Math.floor(max));
         }
         var one=0;two=0;three=0;four=0
         var direction;
@@ -125,7 +158,7 @@ background-color:#ab9696;
         var SnakeArrLastInY;
         var SnakeArrAfterL=9;
         var up=1;down=3;left=0,right=2;//to change direction within javascript snippet(will remove bot and make into a javascript snippet which i will 
-		//paste in browser)
+    //paste in browser)
 
         //Variables between this and below are for food region(the rectangle within which food is displayed)
         var minX=0;maxX=0;minY=0;maxY=0;
@@ -139,56 +172,58 @@ background-color:#ab9696;
         var movedUp=false;
         var movingUp=false;
         var foodEatingDistance=5;
+    var gameStart=false;//to only trigger the start event if not started yet
+    var straySnakeFix=false;//bug fix variable set true if scanning region started
 
         //Variables between this and above are for food region
         if(preMaxX<minX){
-        	//console.log("inside if "+preMaxX+"<"+minX);
-        	if((minX-preMaxX)<minWH){
-        		//console.log("inside second if");
-        		minX+=minWH;
-        	}
-        	maxX=minX;//since minX was larger then preMaxX
-        	minX=preMaxX;
+          //console.log("inside if "+preMaxX+"<"+minX);
+          if((minX-preMaxX)<minWH){
+            //console.log("inside second if");
+            minX+=minWH;
+          }
+          maxX=minX;//since minX was larger then preMaxX
+          minX=preMaxX;
         }
         else if(preMaxX>minX){
-        	//console.log("inside if "+preMaxX+">"+minX);
-        	if((preMaxX-minX)<minWH){
-        		//console.log("inside second if");
-        		preMaxX+=minWH;
+          //console.log("inside if "+preMaxX+">"+minX);
+          if((preMaxX-minX)<minWH){
+            //console.log("inside second if");
+            preMaxX+=minWH;
 
-        	}
-        	maxX=preMaxX;
-        	
+          }
+          maxX=preMaxX;
+          
         }
         else{//if equal both preMaxX and minX are same
-        	//console.log("inside if "+preMaxX+"="+minX);
-        	maxX=minX+minWH;
+          //console.log("inside if "+preMaxX+"="+minX);
+          maxX=minX+minWH;
         }
 
         RegionWid=maxX-minX;
         minY=getRandomInt((CanWidth-15 - minY));//set minX 4 just in case random no is 0
         if(preMaxY<minY){
-        	//console.log("inside if "+preMaxY+"<"+minY);
-        	if((minY-preMaxY)<minWH){
-        		//console.log("inside second if");
-        		minY+=minWH;
-        	}
-        	maxY=minY;
-        	minY=preMaxY;
+          //console.log("inside if "+preMaxY+"<"+minY);
+          if((minY-preMaxY)<minWH){
+            //console.log("inside second if");
+            minY+=minWH;
+          }
+          maxY=minY;
+          minY=preMaxY;
         }
         else if(preMaxY>minY){
-        	//console.log("inside if "+preMaxY+">"+minY);
-        	if((preMaxY-minY)<minWH){
-        		//console.log("inside second if");
-        		preMaxY+=minWH;
+          //console.log("inside if "+preMaxY+">"+minY);
+          if((preMaxY-minY)<minWH){
+            //console.log("inside second if");
+            preMaxY+=minWH;
 
-        	}
-        	maxY=preMaxY;
-        	
+          }
+          maxY=preMaxY;
+          
         }
         else{//if equal
-        	console.log("inside if "+preMaxY+"="+minY);
-        	maxY=minY+minWH;
+          console.log("inside if "+preMaxY+"="+minY);
+          maxY=minY+minWH;
         }
 
         //Below changing elements to actual values found of the foodRegion (this is set only at beginning of a game)
@@ -199,7 +234,7 @@ background-color:#ab9696;
         document.getElementById("col4").innerHTML=maxY;
         //The Object below will tell us status of table to know values of food entered or not. Each time I change value in table I will update this as well
         foodTableStats={
-        	minX: {
+          minX: {
             value:undefined,
             boolEntered:false
         },
@@ -228,10 +263,10 @@ background-color:#ab9696;
         };
         let HeadCoord=[{x:130,y:5}]
         var SnakeX=HeadCoord[0].x;//This SnakeX and SnakeY is head of snake that we will use to find if snake touching edge etc for our bot 
-		//purposes
+    //purposes
         var SnakeY=HeadCoord[0].y;
         var PrevSnakeX=0;//These variables PrevSnakeX PrevSnakeY are used to know direction which
-		//snake is heading or in which snake moved These variables are for bot purposes as well
+    //snake is heading or in which snake moved These variables are for bot purposes as well
         var PrevSnakeY=0;
         /*
     AXIS OF CANVAS
@@ -257,13 +292,13 @@ background-color:#ab9696;
           }
       };
       drawFRegion=function(minX,maxY,maxX,minY){//draws rectangle within which food is displayed
-      	ctx.save();
-      	ctx.beginPath();
-      	ctx.lineWidth = "1";
-      	ctx.strokeStyle = "blue";
-      	ctx.rect(minX, minY, RegionWid, (maxY-minY));
-      	ctx.stroke();
-      	ctx.restore();
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = "1";
+        ctx.strokeStyle = "blue";
+        ctx.rect(minX, minY, RegionWid, (maxY-minY));
+        ctx.stroke();
+        ctx.restore();
       }
       //drawSnake(100,100,0);
       snakeFood={
@@ -285,8 +320,8 @@ background-color:#ab9696;
         // body...
       }
       function addSeg(x,y){//This function was for increasing length but I removed this lenght functionality to prevent fast
-	  //moving snake bot from having errors and make it easy for the code to draw a small snake quickly
-	  //and move easily and make it easy to spot.(I selected max speed for bot from the setInterval)
+    //moving snake bot from having errors and make it easy for the code to draw a small snake quickly
+    //and move easily and make it easy to spot.(I selected max speed for bot from the setInterval)
         SnakeArr.push({x,y});
       }
       drawScore=function(scoreG){
@@ -301,12 +336,20 @@ background-color:#ab9696;
         ctx.fillText("Coord:x:"+HeadCoord[0].x+" y:"+HeadCoord[0].y, 85, 30);
         ctx.restore();
       }
+    drawPreStart=function(){//trigger only if not started
+        ctx.save();
+        ctx.font = "22px Comic Sans MS";
+        ctx.fillStyle = "black";
+    ctx.fillText("Please Press 'g'", 30, 90);
+    ctx.fillText("to start the game", 10, 110);
+        ctx.restore();
+      }
       changeDir=function(mydirection) {
-      	// body...
-      	direction=mydirection;
+        // body...
+        direction=mydirection;
       }
       oneStep=function(){//This function changes the coordinates of segments every iteration. The draw function then draw the 
-	  //snake accordingly
+    //snake accordingly
 for (var i = SnakeArr.length-1; i >= 0; i--) {//bug for loop had to be backwards cuz otherwise
   //all end up on one spot 
   if(direction==0){//if left pressed
@@ -376,24 +419,24 @@ mainFunct=function () {//will get called every x millisecond
           //foodY=(Math.random()*(CanWidth-15))+5;
           //Below is the bot part this is responsible for recording the food coordinates to find the food region
           if(foodTableStats.minX.boolEntered==false || foodTableStats.minX.value>SnakeX){
-          	document.getElementById('mnX').innerHTML=SnakeX;
-          	foodTableStats.minX.boolEntered=true;
-          	foodTableStats.minX.value=SnakeX;
+            document.getElementById('mnX').innerHTML=SnakeX;
+            foodTableStats.minX.boolEntered=true;
+            foodTableStats.minX.value=SnakeX;
           }
           else if((foodTableStats.minX.boolEntered==true && foodTableStats.maxX.boolEntered==false)||foodTableStats.maxX.value<SnakeX ){
-          	document.getElementById('mxX').innerHTML=SnakeX;
-          	foodTableStats.maxX.value=SnakeX;
-          	foodTableStats.maxX.boolEntered=true;
+            document.getElementById('mxX').innerHTML=SnakeX;
+            foodTableStats.maxX.value=SnakeX;
+            foodTableStats.maxX.boolEntered=true;
           }
           if(foodTableStats.minY.boolEntered==false || foodTableStats.minY.value>SnakeY){
-          	document.getElementById('mnY').innerHTML=SnakeY;
-          	foodTableStats.minY.boolEntered=true;
-          	foodTableStats.minY.value=SnakeY;
+            document.getElementById('mnY').innerHTML=SnakeY;
+            foodTableStats.minY.boolEntered=true;
+            foodTableStats.minY.value=SnakeY;
           }
           else if((foodTableStats.minY.boolEntered==true && foodTableStats.maxY.boolEntered==false)||foodTableStats.maxY.value<SnakeY ){
-          	document.getElementById('mxY').innerHTML=SnakeY;
-          	foodTableStats.maxY.value=SnakeY;
-          	foodTableStats.maxY.boolEntered=true;
+            document.getElementById('mxY').innerHTML=SnakeY;
+            foodTableStats.maxY.value=SnakeY;
+            foodTableStats.maxY.boolEntered=true;
           }
 
 
@@ -424,142 +467,143 @@ mainFunct=function () {//will get called every x millisecond
   //Moving Up variable is when it scans canvas upwards
   //AI
   if(PrevSnakeY<SnakeY){//AI
-  	//console.log("changed movedDwn");
-  	movedDown=true;
+    //console.log("changed movedDwn");
+    movedDown=true;
   }
   if(PrevSnakeY>SnakeY){//AI
-  	//console.log("changed movedUp");
-  	movedUp=true;
+    //console.log("changed movedUp");
+    movedUp=true;
   }
   ///Testing AI below SEEMS LIKE CANT USE WHILE LOOP inside setInterval 
   //Below part of code we are scanning the canvas as we are going down...while region is not found ie. score<=20
   if((SnakeY<195)&&(movingUp==false)&&(score<=20)){//Havent reached bottom of region ie. SnakeY<195
-  	if(SnakeX>190&&SnakeX<CanWidth && (movedDown==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	direction=down;
+    if(SnakeX>190&&SnakeX<CanWidth && (movedDown==false)){
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    direction=down;
   }
   if(SnakeX>190&&SnakeX<CanWidth && (movedDown==true)){
-  	//console.log("going left");
-  	direction=left;
-  	PrevSnakeY=SnakeY;
-  	movedDown=false;//reseting value of moved down
+    //console.log("going left");
+    direction=left;
+    PrevSnakeY=SnakeY;
+    movedDown=false;//reseting value of moved down
   }
   if(SnakeX>0&&SnakeX<8 && (movedDown==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	//movedDown=true;
-  	direction=down;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    //movedDown=true;
+    direction=down;
   }
   if(SnakeX>0&&SnakeX<8 && (movedDown==true)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going right");
-  	movedDown=false;
-  	direction=right;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going right");
+    movedDown=false;
+    direction=right;
   }
   }
   
   //Below part we found region (ie.score>=20 we consider it significant for region accuracy) we are scanning food region
   //as we move down
   if((SnakeY<foodTableStats.maxY.value)&&(movingUp==false)&&(score>20)){
-  	//region FOund!!
-  	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	direction=down;
+    straySnakeFix=true;
+    //region FOund!!
+    if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==false)){
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    direction=down;
   }
   if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedDown==true)){
-  	//console.log("going left");
-  	direction=left;
-  	PrevSnakeY=SnakeY;
-  	movedDown=false;
+    //console.log("going left");
+    direction=left;
+    PrevSnakeY=SnakeY;
+    movedDown=false;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedDown==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	//movedDown=true;
-  	direction=down;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    //movedDown=true;
+    direction=down;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedDown==true)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going right");
-  	movedDown=false;
-  	direction=right;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going right");
+    movedDown=false;
+    direction=right;
   }
   }
   
   
   
   if(SnakeY>195 && score<=20){//Now since if SnakeY>195 we have to scan upwards now
-  	movingUp=true;
+    movingUp=true;
   }
     if(SnakeY>foodTableStats.maxY.value && score>20){//in case of food region if 
-  	movingUp=true;
+    movingUp=true;
   }
   
   //Scanning canvas upwards for food from bottom food region hasnt been found ie. score<=20
   if(SnakeY>10&&movingUp==true &&(score<=20)){
-  	if(SnakeX>190&&SnakeX<CanWidth && (movedUp==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	direction=up;
+    if(SnakeX>190&&SnakeX<CanWidth && (movedUp==false)){
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    direction=up;
   }
   if(SnakeX>190&&SnakeX<CanWidth && (movedUp==true)){
-  	//console.log("going left");
-  	direction=left;
-  	PrevSnakeY=SnakeY;
-  	movedUp=false;
+    //console.log("going left");
+    direction=left;
+    PrevSnakeY=SnakeY;
+    movedUp=false;
   }
   if(SnakeX>0&&SnakeX<8 && (movedUp==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	//movedDown=true;
-  	direction=up;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    //movedDown=true;
+    direction=up;
   }
   if(SnakeX>0&&SnakeX<8 && (movedUp==true)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going right");
-  	movedUp=false;
-  	direction=right;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going right");
+    movedUp=false;
+    direction=right;
   }
   }
   
   //In this case scanning food region upward for food from bottom of food region
   if(SnakeY>foodTableStats.minY.value&&movingUp==true &&(score>20)){
-  	if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	direction=up;
+    if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==false)){
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    direction=up;
   }
   if(SnakeX>foodTableStats.maxX.value&&SnakeX<CanWidth && (movedUp==true)){
-  	//console.log("going left");
-  	direction=left;
-  	PrevSnakeY=SnakeY;
-  	movedUp=false;
+    //console.log("going left");
+    direction=left;
+    PrevSnakeY=SnakeY;
+    movedUp=false;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedUp==false)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going down");
-  	//movedDown=true;
-  	direction=up;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going down");
+    //movedDown=true;
+    direction=up;
   }
   if(SnakeX>0&&SnakeX<foodTableStats.minX.value && (movedUp==true)){
-  	//console.log("yesss");
-  	PrevSnakeY=SnakeY;
-  	//console.log("going right");
-  	movedUp=false;
-  	direction=right;
+    //console.log("yesss");
+    PrevSnakeY=SnakeY;
+    //console.log("going right");
+    movedUp=false;
+    direction=right;
   }
   }
   
@@ -569,10 +613,17 @@ mainFunct=function () {//will get called every x millisecond
   
   if(SnakeY<foodTableStats.minY.value && score>20){//Reached top of food region so have to scan down food region for 
   //food
-  	movingUp=false;
+    movingUp=false;
   }
   if(SnakeY<5 && score<=20){//reached top of canvas so have to scan down canvas for food.
-  	movingUp=false;
+    movingUp=false;
+  }
+  if((straySnakeFix==true)&&((SnakeY<(foodTableStats.minY.value)-10)||(SnakeY>(foodTableStats.maxY.value)+10))&&(SnakeX<((CanWidth-10)))){
+    diection=right;
+    console.log("bug fixed");
+    direction=right;
+    straySnakeFix=false;
+
   }
 
 //above for high score part where goes to region found
@@ -587,11 +638,11 @@ mainFunct=function () {//will get called every x millisecond
   three=SnakeArr[0].y-foodList[0].y;
   four=foodList[0].y-SnakeArr[0].y;
   if(direction==up||direction==down){//direction==down or up need more foodeating distance margin for xaxis error fix
-  	if(((one<(1.6*foodEatingDistance)&&one>0)||(two<(1.6*foodEatingDistance)&&two>0))&&(((three)<(foodEatingDistance)&&three>0)||(four<(foodEatingDistance)&&four>0))){
-  	eaten=true;
+    if(((one<(1.6*foodEatingDistance)&&one>0)||(two<(1.6*foodEatingDistance)&&two>0))&&(((three)<(foodEatingDistance)&&three>0)||(four<(foodEatingDistance)&&four>0))){
+    eaten=true;
     score=score+1;
     if (eaten) {
-    	SnakeArrLastIndex++;
+      SnakeArrLastIndex++;
         SnakeArrAfterL++;
         //console.log("length increased");
         }
@@ -599,11 +650,11 @@ mainFunct=function () {//will get called every x millisecond
 
   }
   else{//direction==right or left need more foodeating distance margin for yaxis error fix
-  	if(((one<foodEatingDistance&&one>0)||(two<foodEatingDistance&&two>0))&&(((three)<(1.6*foodEatingDistance)&&three>0)||(four<(1.6*foodEatingDistance)&&four>0))){
-  	eaten=true;
+    if(((one<foodEatingDistance&&one>0)||(two<foodEatingDistance&&two>0))&&(((three)<(1.6*foodEatingDistance)&&three>0)||(four<(1.6*foodEatingDistance)&&four>0))){
+    eaten=true;
     score=score+1;
     if (eaten) {
-    	SnakeArrLastIndex++;
+      SnakeArrLastIndex++;
         SnakeArrAfterL++;
         //console.log("length increased");
         }
@@ -614,6 +665,7 @@ mainFunct=function () {//will get called every x millisecond
         moving=true;
   // body...
 }
+drawPreStart();
       startGame=function () {//initialise snake body and food
         snakeBody=SnakeArr=[{x:85,y:3},{x:75,y:3},{x:65,y:3},{x:55,y:3},{x:45,y:3},{x:35,y:3},{x:25,y:3},{x:15,y:3},{x:5,y:3}];
         score=0;
@@ -631,9 +683,14 @@ mainFunct=function () {//will get called every x millisecond
       }
       myInter=setInterval(mainFunct,4);
     }
-    startGame();
+   // startGame();
     document.onkeydown=function(event){//set direction
-  if(event.keyCode==37){
+  if((event.keyCode==71)&&(gameStart==false)){
+    gameStart=true;
+  startGame();
+    //console.log("pressed left");
+  }
+  else if(event.keyCode==37){
     direction=0;
     //console.log("pressed left");
   }
@@ -665,6 +722,8 @@ mainFunct=function () {//will get called every x millisecond
 
       
   </script>
-
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
 </html>
