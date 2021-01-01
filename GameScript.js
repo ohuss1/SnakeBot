@@ -139,7 +139,7 @@ var PrevSnakeY = 0;
  * @param {number} x - xCoord of segment
  * @param {number} y - yCoord of Segment
  */
-drawSnake = function (x, y, counter) {
+function drawSnake (x, y, counter) {
   ctx.save();
   if (counter == 0) {
     ctx.fillStyle = 'black';
@@ -159,7 +159,7 @@ drawSnake = function (x, y, counter) {
  * @param {number} maxX - The larger XCoord
  * @param {number} minY - The smaller YCoord
  */
-drawFRegion = function (minX, maxY, maxX, minY) {
+function drawFRegion (minX, maxY, maxX, minY) {
   ctx.save();
   ctx.beginPath();
   ctx.lineWidth = "1";
@@ -178,7 +178,7 @@ snakeFood = {//SnakeFood Object,Snake drawn using these details
  * @param {Object} sf - TheSnake Food object
  * @param {number} counter - counter helps with foreach usage in array
  */
-drawFood = function (sf, counter) {
+ function drawFood (sf, counter) {
   ctx.save();
   if (counter == 0) {
     ctx.fillStyle = snakeFood.color;
@@ -202,7 +202,7 @@ function addSeg(x, y) {
  * Function draws or displays the score on the canvas
  * @param {number} scoreG - Current Score
  */
-drawScore = function (scoreG) {
+ function drawScore (scoreG) {
   ctx.save();
   ctx.font = "10px Comic Sans MS";
   ctx.fillStyle = "black";
@@ -217,7 +217,7 @@ drawScore = function (scoreG) {
 /**
  * Function allows to display the Start Screen of Game ie. press g to start
  */
-drawPreStart = function () {
+ function drawPreStart () {
   ctx.save();
   ctx.font = "22px Comic Sans MS";
   ctx.fillStyle = "black";
@@ -229,14 +229,14 @@ drawPreStart = function () {
  * Change direction function
  * @param {number} mydirection to update direction of snake
  */
-changeDir = function (mydirection) {
+ function changeDir (mydirection) {
   // body...
   direction = mydirection;
 }
 /**
  * This function updates snake segment coordinates,this is called every frame by main function. The draw function will draw according to the updated details
  */
-oneStep = function () {
+ function oneStep () {
   for (var i = SnakeArr.length - 1; i >= 0; i--) {
     if (direction == 0) {//if left pressed
       if (SnakeArr[0].x > 0) {
@@ -291,7 +291,7 @@ oneStep = function () {
 /**
  * This is the main function,this function is the function that gets called every frame and calls all other required functions in it.
  */
-mainFunct = function () {
+ function mainFunct () {
   ctx.clearRect(0, 0, CanHeight, CanWidth);//clear whole canvas every frame
   drawFRegion(minX, maxY, maxX, minY);//drawfood region every frame
   for (var i = 0; i < SnakeArr.length; i++) {//draw Snake based on latest segment coordinates
@@ -303,10 +303,8 @@ mainFunct = function () {
   SnakeY = HeadCoord[0].y;
   document.getElementById("Score").innerHTML = ("Score: " + (score));//draw score outside canvas on top
   drawScore(score);//display score in canvas
-  while (eaten) {
-    //foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
-    //foodY=(Math.random()*(CanWidth-15))+5;
 
+  while (eaten) {
     //each time i eat i record food coordinate to predict food region,so i can simply search for food in this region
     //Updating predicted food region based on coordinate of food we ate,only update if ate food in previous frame.
     if (foodTableStats.minX.boolEntered == false || foodTableStats.minX.value > SnakeX) {//if previous minX > food Coord we encountered(ate) OR if no previous minX
