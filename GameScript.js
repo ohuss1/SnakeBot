@@ -104,7 +104,7 @@ document.getElementById("col4").innerHTML = maxY;
 foodTableStats = {
   minX: {
     value: undefined,
-    boolEntered: false
+    boolEntered: false//false means no previuos value of minX; where minX is prediction of minX of food region made when food eaten  
   },
   maxX: {
     value: undefined,
@@ -234,7 +234,7 @@ changeDir = function (mydirection) {
   direction = mydirection;
 }
 /**
- * This function updates snake segment coordinates,this is called every frame where frame. The draw function will draw according to the updated details
+ * This function updates snake segment coordinates,this is called every frame by main function. The draw function will draw according to the updated details
  */
 oneStep = function () {
   for (var i = SnakeArr.length - 1; i >= 0; i--) {
@@ -288,24 +288,29 @@ oneStep = function () {
     }
   }
 }
-
-mainFunct = function () {//will get called every x millisecond
-  ctx.clearRect(0, 0, CanHeight, CanWidth);
-  drawFRegion(minX, maxY, maxX, minY);
-  for (var i = 0; i < SnakeArr.length; i++) {
+/**
+ * This is the main function,this function is the function that gets called every frame and calls all other required functions in it.
+ */
+mainFunct = function () {
+  ctx.clearRect(0, 0, CanHeight, CanWidth);//clear whole canvas every frame
+  drawFRegion(minX, maxY, maxX, minY);//drawfood region every frame
+  for (var i = 0; i < SnakeArr.length; i++) {//draw Snake based on latest segment coordinates
     drawSnake((SnakeArr[i].x), (SnakeArr[i].y), (i));
   }
   HeadCoord[0].x = SnakeArr[0].x;
   HeadCoord[0].y = SnakeArr[0].y;
   SnakeX = HeadCoord[0].x;
   SnakeY = HeadCoord[0].y;
-  document.getElementById("Score").innerHTML = ("Score: " + (score));
-  drawScore(score);
-  while (eaten) {//to select new coordinate if ffod was eaten
+  document.getElementById("Score").innerHTML = ("Score: " + (score));//draw score outside canvas on top
+  drawScore(score);//display score in canvas
+  while (eaten) {
     //foodX=(Math.random()*(CanWidth-15))+5;//15 less then canvaswidth
     //foodY=(Math.random()*(CanWidth-15))+5;
-    //Below is the bot part this is responsible for recording the food coordinates to find the food region
-    if (foodTableStats.minX.boolEntered == false || foodTableStats.minX.value > SnakeX) {
+
+    //each time i eat i record food coordinate to predict food region,so i can simply search for food in this region
+    //Updating predicted food region based on coordinate of food we ate,only update if ate food in previous frame.
+    if (foodTableStats.minX.boolEntered == false || foodTableStats.minX.value > SnakeX) {//if previous minX > food Coord we encountered(ate) OR if no previous minX
+      //prediction, then update minX prediction
       document.getElementById('mnX').innerHTML = SnakeX;
       foodTableStats.minX.boolEntered = true;
       foodTableStats.minX.value = SnakeX;
@@ -328,13 +333,15 @@ mainFunct = function () {//will get called every x millisecond
 
 
     //
-    foodX = Math.random() * (maxX - minX) + minX;//food will appear within region
+    foodX = Math.random() * (maxX - minX) + minX;//since food eaten so redraw food within foodregion
     foodY = Math.random() * (maxY - minY) + minY;
     foodList[0].x = foodX;
     foodList[0].y = foodY;
     eaten = false;
   }
   foodList.forEach(drawFood);
+
+
   //BOT which scans canvas starts from here
 
   //1-BOT scans through canvas by moving snake line by line downwards and then line by line upwards.
@@ -553,7 +560,10 @@ mainFunct = function () {//will get called every x millisecond
   // body...
 }
 drawPreStart();
-startGame = function () {//initialise snake body and food
+/**
+ * This function initialises game and other variables of game and calls the main function.This function is called when we start game by pressing g
+ */
+startGame = function () {
   snakeBody = SnakeArr = [{ x: 85, y: 3 }, { x: 75, y: 3 }, { x: 65, y: 3 }, { x: 55, y: 3 }, { x: 45, y: 3 }, { x: 35, y: 3 }, { x: 25, y: 3 }, { x: 15, y: 3 }, { x: 5, y: 3 }];
   score = 0;
   eaten = false;
