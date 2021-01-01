@@ -36,7 +36,8 @@ var RegionWid;//var needed to draw rectangle food region
 var minWH = 15;//minimum difference between maxX and minX that I want ie minimum width of food rectangle
 /**
  * 
- * @param {number} max  
+ * @param {number} max 
+ * @return {number} - Random number bounded by max
  */
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -132,7 +133,13 @@ var PrevSnakeX = 0;//These variables PrevSnakeX PrevSnakeY are used to know dire
 //snake is heading or in which snake moved These variables are for bot purposes as well
 var PrevSnakeY = 0;
 
-drawSnake = function (x, y, counter) {//function will be called on all elements of snake
+
+/**
+ * Function draws segment of snake,we loop through snake body array and call on each segment
+ * @param {number} x - xCoord of segment
+ * @param {number} y - yCoord of Segment
+ */
+drawSnake = function (x, y, counter) {
   ctx.save();
   if (counter == 0) {
     ctx.fillStyle = 'black';
@@ -144,8 +151,15 @@ drawSnake = function (x, y, counter) {//function will be called on all elements 
     ctx.fillRect(x, y, snakeSeg.width, snakeSeg.height);
     ctx.restore();
   }
-};
-drawFRegion = function (minX, maxY, maxX, minY) {//draws rectangle within which food is displayed
+}
+/**
+ * Function draws the randomly located rectangel in which food will appear throughout game
+ * @param {number} minX - The smaller XCoord
+ * @param {number} maxY - The larger YCoord
+ * @param {number} maxX - The larger XCoord
+ * @param {number} minY - The smaller YCoord
+ */
+drawFRegion = function (minX, maxY, maxX, minY) {
   ctx.save();
   ctx.beginPath();
   ctx.lineWidth = "1";
@@ -154,12 +168,16 @@ drawFRegion = function (minX, maxY, maxX, minY) {//draws rectangle within which 
   ctx.stroke();
   ctx.restore();
 }
-//drawSnake(100,100,0);
-snakeFood = {
+
+snakeFood = {//SnakeFood Object,Snake drawn using these details
   color: "CadetBlue",
   width: 15,
   height: 15
 };
+/**
+ * @param {Object} sf - TheSnake Food object
+ * @param {number} counter - counter helps with foreach usage in array
+ */
 drawFood = function (sf, counter) {
   ctx.save();
   if (counter == 0) {
@@ -171,13 +189,19 @@ drawFood = function (sf, counter) {
     ctx.fill();
     ctx.restore();
   }
-  // body...
 }
-function addSeg(x, y) {//This function was for increasing length but I removed this lenght functionality to prevent fast
-  //moving snake bot from having errors and make it easy for the code to draw a small snake quickly
-  //and move easily and make it easy to spot.(I selected max speed for bot from the setInterval)
+/**
+ * unused Function intended to increase lenght of snake,since bot snake moves fast so I wont use this
+ * @param {number} x - xcoord 
+ * @param {number} y  - ycoord
+ */
+function addSeg(x, y) {
   SnakeArr.push({ x, y });
 }
+/**
+ * Function draws or displays the score on the canvas
+ * @param {number} scoreG - Current Score
+ */
 drawScore = function (scoreG) {
   ctx.save();
   ctx.font = "10px Comic Sans MS";
@@ -190,7 +214,10 @@ drawScore = function (scoreG) {
   ctx.fillText("Coord:x:" + HeadCoord[0].x + " y:" + HeadCoord[0].y, 85, 30);
   ctx.restore();
 }
-drawPreStart = function () {//trigger only if not started
+/**
+ * Function allows to display the Start Screen of Game ie. press g to start
+ */
+drawPreStart = function () {
   ctx.save();
   ctx.font = "22px Comic Sans MS";
   ctx.fillStyle = "black";
@@ -200,16 +227,17 @@ drawPreStart = function () {//trigger only if not started
 }
 /**
  * Change direction function
- * @param {number} mydirection to update direction
+ * @param {number} mydirection to update direction of snake
  */
 changeDir = function (mydirection) {
   // body...
   direction = mydirection;
 }
-oneStep = function () {//This function changes the coordinates of segments every iteration. The draw function then draw the 
-  //snake accordingly
-  for (var i = SnakeArr.length - 1; i >= 0; i--) {//bug for loop had to be backwards cuz otherwise
-    //all end up on one spot 
+/**
+ * This function updates snake segment coordinates,this is called every frame where frame. The draw function will draw according to the updated details
+ */
+oneStep = function () {
+  for (var i = SnakeArr.length - 1; i >= 0; i--) {
     if (direction == 0) {//if left pressed
       if (SnakeArr[0].x > 0) {
 
@@ -224,7 +252,7 @@ oneStep = function () {//This function changes the coordinates of segments every
       }
 
     }
-    else if (direction == 1) {
+    else if (direction == 1) {//if direction pressed is up
       //if pressed up
       if (SnakeArr[0].y > 0) {
         if (i == 0) {
@@ -260,6 +288,7 @@ oneStep = function () {//This function changes the coordinates of segments every
     }
   }
 }
+
 mainFunct = function () {//will get called every x millisecond
   ctx.clearRect(0, 0, CanHeight, CanWidth);
   drawFRegion(minX, maxY, maxX, minY);
