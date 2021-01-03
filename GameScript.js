@@ -1,4 +1,4 @@
-var ctx = document.getElementById('ctx').getContext('2d');
+
 /*
 AXIS OF CANVAS
 X AXIX --->>> increases from 0
@@ -9,7 +9,7 @@ Inccreases From 0
       \|/
        +
 */
-
+var ctx = document.getElementById('ctx').getContext('2d');
 var CanHeight = 210;
 var CanWidth = 210;
 var bG = document.querySelector("#ctx")//background
@@ -73,7 +73,7 @@ else {//if equal both preMaxX and minX are same
   maxX = minX + minWH;
 }
 RegionWid = maxX - minX;
-minY = getRandomInt((CanWidth - 15 - minY));//set minX 4 just in case random no is 0
+minY = getRandomInt((CanWidth - 15 - minY));
 if (preMaxY < minY) {
   if ((minY - preMaxY) < minWH) {
     minY += minWH;
@@ -125,6 +125,11 @@ snakeSeg = {//SnakeSegment object,Snake is array of these objects that will be d
   width: 13,
   height: 13
 };
+snakeFood = {//SnakeFood Object,Snake drawn using these details
+  color: "CadetBlue",
+  width: 15,
+  height: 15
+};
 let HeadCoord = [{ x: 130, y: 5 }]
 var SnakeX = HeadCoord[0].x;//This SnakeX and SnakeY is head of snake that we will use to find if snake touching edge etc for our bot 
 //purposes
@@ -169,11 +174,7 @@ function drawFRegion (minX, maxY, maxX, minY) {
   ctx.restore();
 }
 
-snakeFood = {//SnakeFood Object,Snake drawn using these details
-  color: "CadetBlue",
-  width: 15,
-  height: 15
-};
+
 /**
  * @param {Object} sf - TheSnake Food object
  * @param {number} counter - counter helps with foreach usage in array
@@ -289,7 +290,136 @@ function addSeg(x, y) {
   }
 }
 /**
- * This is the main function,this function is the function that gets called every frame and calls all other required functions in it.
+ * This function will control the snake. Will make snake scan canvas (or Food region after it has been found) for food,by scanning down left to right,right to left. After reaching bottom, scanning up left to right,right to left.
+ * 
+ * Function uses Global variables declared in this file. Score<=20 means food region not found and vice versa.
+ */
+function snakeBot(){
+  //If snake has direction right or left it will contrinue going in that direction in all frames,so when snake reaches end of canvas
+  //it needs to go down or up depending on whether we are scanning down or up. 
+  if (PrevSnakeY < SnakeY) {
+    movedDown = true;//Tells Bot that we already moved down when reached end of canvas so now need to go right or left.
+  }
+  if (PrevSnakeY > SnakeY) {
+    movedUp = true;//Tells Bot that we already moved down when reached end of canvas so now need to go right or left.
+  }
+//movingUp variable false tells snake to scan downwards and not upwards.
+  if ((SnakeY < CanHeight-15) && (movingUp == false) && (score <= 20)) {//Scanning down Canvas since food region not found
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedDown == false)) {//reached right end of canvas move down one step
+      PrevSnakeY = SnakeY;//will set movedDown to true in next frame using the if statement
+      direction = down;//will set movedDown to true in next frame using the if statement
+    }
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedDown == true)) {//reached right end of canvas and moved down,so go left.
+      direction = left;
+      PrevSnakeY = SnakeY;
+      movedDown = false;//reseting value of moved down
+    }
+    if (SnakeX > 0 && SnakeX < 8 && (movedDown == false)) {//reached left end of canvas, move down one step
+      PrevSnakeY = SnakeY;
+      direction = down;//will set movedDown to true in next frame using the if statement
+    }
+    if (SnakeX > 0 && SnakeX < 8 && (movedDown == true)) {//reached left end of canvas and moved down one step. So go right
+      PrevSnakeY = SnakeY;
+      movedDown = false;
+      direction = right;
+    }
+  }
+
+  //scan food region if it has been found part.
+  if ((SnakeY < foodTableStats.maxY.value) && (movingUp == false) && (score > 20)) {//Scanning downwards the food region if found
+    straySnakeFix = true;//a bug fix,bug caused snake to get outside from food region
+    if (SnakeX > foodTableStats.maxX.value && SnakeX < CanWidth && (movedDown == false)) {//reached right end of food region move down one step
+      PrevSnakeY = SnakeY;//will set movedDown to true in next frame using the if statement
+      direction = down;
+    }
+    if (SnakeX > foodTableStats.maxX.value && SnakeX < CanWidth && (movedDown == true)) {//reached right end of food region and moved down,so go left.
+      direction = left;
+      PrevSnakeY = SnakeY;
+      movedDown = false;//resetting value of moved down
+    }
+    if (SnakeX > 0 && SnakeX < foodTableStats.minX.value && (movedDown == false)) {//reached left end of food region, move down one step
+      PrevSnakeY = SnakeY;
+      direction = down;
+    }
+    if (SnakeX > 0 && SnakeX < foodTableStats.minX.value && (movedDown == true)) {//reached left end of food region and moved down one step. So go right
+      PrevSnakeY = SnakeY;
+      movedDown = false;
+      direction = right;
+    }
+  }
+
+  //Scan upwards part
+  if (SnakeY > CanHeight-15 && score <= 20) {//For scanning up,since snake at bottom of canvas we set movingUp true,this will only
+    //allow the scan up to work;setting movingUp to false only allows scan down to work.
+    movingUp = true;
+  }
+  if (SnakeY > foodTableStats.maxY.value && score > 20) {//in case if scanning food region we enable scan up using this. 
+    movingUp = true;
+  }
+
+  
+  if (SnakeY > 10 && movingUp == true && (score <= 20)) {//If food region not found,Scanning canvas upwards for food from bottom of canvas.
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedUp == false)) {
+      PrevSnakeY = SnakeY;
+      direction = up;
+    }
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedUp == true)) {
+      direction = left;
+      PrevSnakeY = SnakeY;
+      movedUp = false;
+    }
+    if (SnakeX > 0 && SnakeX < 8 && (movedUp == false)) {
+      PrevSnakeY = SnakeY;
+      direction = up;
+    }
+    if (SnakeX > 0 && SnakeX < 8 && (movedUp == true)) {
+      PrevSnakeY = SnakeY;
+      movedUp = false;
+      direction = right;
+    }
+  }
+
+  //scan food region upwards if food region found and we are at bottom of food region
+  if (SnakeY > foodTableStats.minY.value && movingUp == true && (score > 20)) {//scan food region upwards if food region found and we are at bottom of food region
+    if (SnakeX > foodTableStats.maxX.value && SnakeX < CanWidth && (movedUp == false)) {
+      PrevSnakeY = SnakeY;
+      direction = up;
+    }
+    if (SnakeX > foodTableStats.maxX.value && SnakeX < CanWidth && (movedUp == true)) {
+      direction = left;
+      PrevSnakeY = SnakeY;
+      movedUp = false;
+    }
+    if (SnakeX > 0 && SnakeX < foodTableStats.minX.value && (movedUp == false)) {
+      PrevSnakeY = SnakeY;
+      direction = up;
+    }
+    if (SnakeX > 0 && SnakeX < foodTableStats.minX.value && (movedUp == true)) {
+      PrevSnakeY = SnakeY;
+      movedUp = false;
+      direction = right;
+    }
+  }
+  //reset movingUp if reached top of foodregion/canvas
+  if (SnakeY < foodTableStats.minY.value && score > 20) {//Reached top of food region so have to scan down food region for 
+    //food
+    movingUp = false;
+  }
+  if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down canvas for food.
+    movingUp = false;
+  }
+  if ((straySnakeFix == true) && ((SnakeY < (foodTableStats.minY.value) - 10) || (SnakeY > (foodTableStats.maxY.value) + 10)) && (SnakeX < ((CanWidth - 10)))) {//attempt to fix bug which causes snake to wander away from food region
+    diection = right;
+    direction = right;
+    straySnakeFix = false;
+
+  }
+
+
+
+}
+/**
+ * This is the main function,this function is the function that gets called every frame by our setInterval loop and calls all other required functions in it.
  */
  function mainFunct () {
   ctx.clearRect(0, 0, CanHeight, CanWidth);//clear whole canvas every frame
@@ -338,8 +468,7 @@ function addSeg(x, y) {
     eaten = false;
   }
   foodList.forEach(drawFood);
-
-
+  //checked comments till here
   //BOT which scans canvas starts from here
 
   //1-BOT scans through canvas by moving snake line by line downwards and then line by line upwards.
@@ -368,14 +497,14 @@ function addSeg(x, y) {
   }
   ///Testing AI below SEEMS LIKE CANT USE WHILE LOOP inside setInterval 
   //Below part of code we are scanning the canvas as we are going down...while region is not found ie. score<=20
-  if ((SnakeY < 195) && (movingUp == false) && (score <= 20)) {//Havent reached bottom of region ie. SnakeY<195
-    if (SnakeX > 190 && SnakeX < CanWidth && (movedDown == false)) {
+  if ((SnakeY < CanHeight-15) && (movingUp == false) && (score <= 20)) {//Havent reached bottom of region ie. SnakeY<195
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedDown == false)) {
       //console.log("yesss");
       PrevSnakeY = SnakeY;
       //console.log("going down");
-      direction = down;
+      direction = down;//will set movedDown to true in next frame
     }
-    if (SnakeX > 190 && SnakeX < CanWidth && (movedDown == true)) {
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedDown == true)) {
       //console.log("going left");
       direction = left;
       PrevSnakeY = SnakeY;
@@ -432,7 +561,7 @@ function addSeg(x, y) {
 
 
 
-  if (SnakeY > 195 && score <= 20) {//Now since if SnakeY>195 we have to scan upwards now
+  if (SnakeY > CanHeight-15 && score <= 20) {//Now since if SnakeY>195 we have to scan upwards now
     movingUp = true;
   }
   if (SnakeY > foodTableStats.maxY.value && score > 20) {//in case of food region if 
@@ -441,13 +570,13 @@ function addSeg(x, y) {
 
   //Scanning canvas upwards for food from bottom food region hasnt been found ie. score<=20
   if (SnakeY > 10 && movingUp == true && (score <= 20)) {
-    if (SnakeX > 190 && SnakeX < CanWidth && (movedUp == false)) {
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedUp == false)) {
       //console.log("yesss");
       PrevSnakeY = SnakeY;
       //console.log("going down");
       direction = up;
     }
-    if (SnakeX > 190 && SnakeX < CanWidth && (movedUp == true)) {
+    if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedUp == true)) {
       //console.log("going left");
       direction = left;
       PrevSnakeY = SnakeY;
@@ -512,7 +641,7 @@ function addSeg(x, y) {
   }
   if ((straySnakeFix == true) && ((SnakeY < (foodTableStats.minY.value) - 10) || (SnakeY > (foodTableStats.maxY.value) + 10)) && (SnakeX < ((CanWidth - 10)))) {
     diection = right;
-    console.log("bug fixed");
+    //console.log("bug fixed");
     direction = right;
     straySnakeFix = false;
 
