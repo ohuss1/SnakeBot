@@ -54,14 +54,14 @@ var gameStart = false;//to only trigger the start event if not started yet
 var straySnakeFix = false;//bug fix variable set true if scanning region started
 
 //Below we are setting food region coordinates the randomly placed rectangle in which food will appear
-if (preMaxX < minX) {
-  if ((minX - preMaxX) < minWH) {
+if (preMaxX < minX) {//if minX coord happened to be larger then max we swap
+  if ((minX - preMaxX) < minWH) {//if difference smaller then minimum width of rectangle i want.
     minX += minWH;
   }
   maxX = minX;//since minX was larger then preMaxX
   minX = preMaxX;
 }
-else if (preMaxX > minX) {
+else if (preMaxX > minX) {//if max was already larger then minX just check that we are not getting width smaller then minWH
   if ((preMaxX - minX) < minWH) {
     preMaxX += minWH;
 
@@ -94,14 +94,14 @@ else {//if equal
   maxY = minY + minWH;
 }//food region variables have been set
 
-//Below Display the food region coordinates in the table,done only at beginning of game
+//Below Display the food region coordinates (actual not predicted) in the table,done only at beginning of game
 
 document.getElementById("col1").innerHTML = minX;
 document.getElementById("col2").innerHTML = maxX;
 document.getElementById("col3").innerHTML = minY;
 document.getElementById("col4").innerHTML = maxY;
 //The Object below will tell us status of table to know values of food entered or not. Each time I change value in table I will update this object as well
-foodTableStats = {
+foodTableStats = {//This object will have predicted values of food region based on food coordinates recorded when eating.
   minX: {
     value: undefined,
     boolEntered: false//false means no previuos value of minX; where minX is prediction of minX of food region made when food eaten  
@@ -411,11 +411,11 @@ if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down can
     }
   }
   
-  if ((straySnakeFix == true) && ((SnakeY < (foodTableStats.minY.value) - 10) || (SnakeY > (foodTableStats.maxY.value) + 10)) && (SnakeX < ((CanWidth - 10)))) {//attempt to fix bug which causes snake to wander away from food region
-    diection = right;
+  if ((straySnakeFix == true) && ((SnakeY < (foodTableStats.minY.value) - 10) || (SnakeY > (foodTableStats.maxY.value) + 10)) && (SnakeX < ((CanWidth - 10)))) {//attempt to fix bug which causes snake to occasionally wander away from food region when score >20
+    diection = right;//works by leading snake to edge of horizontal canvas,so as soon as edge of canvas reached the scan food region 
+    //code directs it back to scan food region,food region code has no condition to control snake if snakeX is <maxX and >maxX,so a snake going down or up kept going up.
     direction = right;
     straySnakeFix = false;
-
   }
 
 
@@ -528,7 +528,7 @@ startGame = function () {
   }
   myInter = setInterval(mainFunct, 4);
 }
-document.onkeydown = function (event) {//set direction
+document.onkeydown = function (event) {//set direction or pause/resume game
   if ((event.keyCode == 71) && (gameStart == false)) {
     gameStart = true;
     startGame();
