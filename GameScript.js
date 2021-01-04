@@ -298,11 +298,21 @@ function snakeBot(){
   //If snake has direction right or left it will contrinue going in that direction in all frames,so when snake reaches end of canvas
   //it needs to go down or up depending on whether we are scanning down or up. 
   if (PrevSnakeY < SnakeY) {
-    movedDown = true;//Tells Bot that we already moved down when reached end of canvas so now need to go right or left.
+    movedDown = true;//Tells Bot that we already moved down one step when reached end of canvas so now need to go right or left.
   }
   if (PrevSnakeY > SnakeY) {
-    movedUp = true;//Tells Bot that we already moved down when reached end of canvas so now need to go right or left.
+    movedUp = true;//Tells Bot that we already moved up one step when reached end of canvas so now need to go right or left.
   }
+
+//reset movingUp if reached top of foodregion/canvas,set to false when we need to scan down when at top.
+if (SnakeY < foodTableStats.minY.value && score > 20) {//Reached top of food region so have to scan down food region for 
+  //food
+  movingUp = false;
+}
+if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down canvas for food.
+  movingUp = false;
+}
+
 //movingUp variable false tells snake to scan downwards and not upwards.
   if ((SnakeY < CanHeight-15) && (movingUp == false) && (score <= 20)) {//Scanning down Canvas since food region not found
     if (SnakeX > CanWidth-20 && SnakeX < CanWidth && (movedDown == false)) {//reached right end of canvas move down one step
@@ -400,14 +410,7 @@ function snakeBot(){
       direction = right;
     }
   }
-  //reset movingUp if reached top of foodregion/canvas
-  if (SnakeY < foodTableStats.minY.value && score > 20) {//Reached top of food region so have to scan down food region for 
-    //food
-    movingUp = false;
-  }
-  if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down canvas for food.
-    movingUp = false;
-  }
+  
   if ((straySnakeFix == true) && ((SnakeY < (foodTableStats.minY.value) - 10) || (SnakeY > (foodTableStats.maxY.value) + 10)) && (SnakeX < ((CanWidth - 10)))) {//attempt to fix bug which causes snake to wander away from food region
     diection = right;
     direction = right;
@@ -469,7 +472,7 @@ function snakeBot(){
   }
   foodList.forEach(drawFood);
 
-  snakeBot();
+  snakeBot();//Controls snake to make it scan whole canvas for food,when food region found only scans through foodregion for food.
   oneStep();
 
   //Below we are finding distance between food and snakeHead. If it is within threshhold then we say eaten=true; and
