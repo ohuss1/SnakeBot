@@ -298,10 +298,10 @@ function snakeBot(){
   //If snake has direction right or left it will contrinue going in that direction in all frames,so when snake reaches end of canvas
   //it needs to go down or up depending on whether we are scanning down or up. 
   if (PrevSnakeY < SnakeY) {
-    movedDown = true;//Tells Bot that we already moved down one step when reached end of canvas so now need to go right or left.
+    movedDown = true;//Tells Bot that we already moved down one step after reached horizontal end of canvas so now need to go right or left.
   }
   if (PrevSnakeY > SnakeY) {
-    movedUp = true;//Tells Bot that we already moved up one step when reached end of canvas so now need to go right or left.
+    movedUp = true;//Tells Bot that we already moved up one step after reached horizontal end of canvas so now need to go right or left.
   }
 
 //reset movingUp if reached top of foodregion/canvas,set to false when we need to scan down when at top.
