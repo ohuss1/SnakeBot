@@ -304,7 +304,7 @@ function snakeBot(){
     movedUp = true;//Tells Bot that we already moved up one step after reached horizontal end of canvas so now need to go right or left.
   }
 
-//reset movingUp if reached top of foodregion/canvas,set to false when we need to scan down when at top.
+//reset movingUp if reached top of foodregion/canvas,set to false when we need to scan down because we are at top.
 if (SnakeY < foodTableStats.minY.value && score > 20) {//Reached top of food region so have to scan down food region for 
   //food
   movingUp = false;
@@ -360,7 +360,7 @@ if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down can
 
   //Scan upwards part
   if (SnakeY > CanHeight-15 && score <= 20) {//For scanning up,since snake at bottom of canvas we set movingUp true,this will only
-    //allow the scan up to work;setting movingUp to false only allows scan down to work.
+    //allow the scan up to work;just like setting movingUp to false only allows scan down to work.
     movingUp = true;
   }
   if (SnakeY > foodTableStats.maxY.value && score > 20) {//in case if scanning food region we enable scan up using this. 
@@ -486,10 +486,9 @@ if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down can
     if (((one < (1.6 * foodEatingDistance) && one > 0) || (two < (1.6 * foodEatingDistance) && two > 0)) && (((three) < (foodEatingDistance) && three > 0) || (four < (foodEatingDistance) && four > 0))) {
       eaten = true;
       score = score + 1;
-      if (eaten) {
-        SnakeArrLastIndex++;
+      if (eaten) {//update variables for function that could increase snake length. Not being used since snake too fast.
+        SnakeArrLastIndex++;//variable used by function that increases snake length
         SnakeArrAfterL++;
-        //console.log("length increased");
       }
     }
 
@@ -498,19 +497,17 @@ if (SnakeY < 5 && score <= 20) {//reached top of canvas so have to scan down can
     if (((one < foodEatingDistance && one > 0) || (two < foodEatingDistance && two > 0)) && (((three) < (1.6 * foodEatingDistance) && three > 0) || (four < (1.6 * foodEatingDistance) && four > 0))) {
       eaten = true;
       score = score + 1;
-      if (eaten) {
+      if (eaten) {//update variables for function that could increase snake length. Not being used since snake too fast.
         SnakeArrLastIndex++;
         SnakeArrAfterL++;
         //console.log("length increased");
       }
     }
   }
-
-
-  moving = true;
+  moving = true;//used by pause and resume keys.
   // body...
 }
-drawPreStart();
+drawPreStart();//calling this to draw prestart screen.
 /**
  * This function initialises game and other variables of game and calls the main function.This function is called when we start game by pressing g
  */
@@ -531,7 +528,6 @@ startGame = function () {
   }
   myInter = setInterval(mainFunct, 4);
 }
-// startGame();
 document.onkeydown = function (event) {//set direction
   if ((event.keyCode == 71) && (gameStart == false)) {
     gameStart = true;
@@ -554,13 +550,13 @@ document.onkeydown = function (event) {//set direction
     direction = 3;
     //console.log("pressed down");
   }
-  else if ((event.keyCode == 32) && (moving == true)) {//created this to stop game
+  else if ((event.keyCode == 32) && (moving == true)) {//created this to pause game
     //console.log("spacebar");
     clearInterval(myInter);
     moving = false;
 
   }
-  else if ((event.keyCode == 32) && (moving == false)) {//created this to start game
+  else if ((event.keyCode == 32) && (moving == false)) {//created this to resume game
     //console.log("spacebar to start");
     myInter = setInterval(mainFunct, 8);
     moving = true;
