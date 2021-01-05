@@ -30,7 +30,7 @@ var up = 1; down = 3; left = 0, right = 2;//to change direction within javascrip
 //paste in browser)
 
 //Variables between this and below are for food region(the rectangle within which food is displayed)
-var minX = 0; maxX = 0; minY = 0; maxY = 0;
+var minX = 0; maxX = 0; minY = 0; maxY = 0;//food region variable.
 var max = CanWidth - 15;
 var RegionWid;//var needed to draw rectangle food region
 var minWH = 15;//minimum difference between maxX and minX that I want ie minimum width of food rectangle
@@ -43,7 +43,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 minX = getRandomInt((CanWidth - 15 - minX));
-var preMaxX = getRandomInt((CanWidth - 15 - 0));//since we dont know value before hand so will decide to make this maxX of coord
+var preMaxX = getRandomInt((CanWidth - 15 - 0));//food region variable,will use this to get minX the LHS coord of rect and maxX RHS coord
 //based on value
 var preMaxY = getRandomInt((CanWidth - 15 - 0));
 var movedDown = false;
@@ -52,8 +52,12 @@ var movingUp = false;
 var foodEatingDistance = 5;
 var gameStart = false;//to only trigger the start event if not started yet
 var straySnakeFix = false;//bug fix variable set true if scanning region started
-
-//Below we are setting food region coordinates the randomly placed rectangle in which food will appear
+/**
+ * Function is called at the start of the game. Function uses Global variables to set location of food region, that is the randomly placed rectangle within which food will appear all the time.
+ * Function then displays these coordinates. in the table.
+ */
+function actualFoodRegionCoordinates(){
+//Below we are setting food region coordinates the randomly placed rectangle in which food will appear.
 if (preMaxX < minX) {//if minX coord happened to be larger then max we swap
   if ((minX - preMaxX) < minWH) {//if difference smaller then minimum width of rectangle i want.
     minX += minWH;
@@ -90,7 +94,6 @@ else if (preMaxY > minY) {
 
 }
 else {//if equal
-  console.log("inside if " + preMaxY + "=" + minY);
   maxY = minY + minWH;
 }//food region variables have been set
 
@@ -100,6 +103,9 @@ document.getElementById("col1").innerHTML = minX;
 document.getElementById("col2").innerHTML = maxX;
 document.getElementById("col3").innerHTML = minY;
 document.getElementById("col4").innerHTML = maxY;
+}
+
+
 //The Object below will tell us status of table to know values of food entered or not. Each time I change value in table I will update this object as well
 foodTableStats = {//This object will have predicted values of food region based on food coordinates recorded when eating.
   minX: {
@@ -511,7 +517,8 @@ drawPreStart();//calling this to draw prestart screen.
 /**
  * This function initialises game and other variables of game and calls the main function.This function is called when we start game by pressing g
  */
-startGame = function () {
+function startGame() {
+  actualFoodRegionCoordinates();
   snakeBody = SnakeArr = [{ x: 85, y: 3 }, { x: 75, y: 3 }, { x: 65, y: 3 }, { x: 55, y: 3 }, { x: 45, y: 3 }, { x: 35, y: 3 }, { x: 25, y: 3 }, { x: 15, y: 3 }, { x: 5, y: 3 }];
   score = 0;
   eaten = false;
