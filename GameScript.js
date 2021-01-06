@@ -53,8 +53,9 @@ var foodEatingDistance = 5;
 var gameStart = false;//to only trigger the start event if not started yet
 var straySnakeFix = false;//bug fix variable set true if scanning region started
 /**
- * Function is called at the start of the game. Function uses Global variables to set location of food region, that is the randomly placed rectangle within which food will appear all the time.
+ * Function is called at the start of the game. Function uses Global variables to compute and set location of food region, that is the randomly placed rectangle within which food will appear all the time.
  * Function then displays these coordinates. in the table.
+ * drawFRegion() will use the results to the draw the rectangular region on canvas.
  */
 function actualFoodRegionCoordinates(){
 //Below we are setting food region coordinates the randomly placed rectangle in which food will appear.
